@@ -37,5 +37,5 @@ sysinfo.txt
 
 # self modified
 .PowerFolder/
-.PowerFolder\FolderStatistic
-.PowerFolder\.PowerFolder.db
+.PowerFolder/FolderStatistic
+.PowerFolder/.PowerFolder.db
