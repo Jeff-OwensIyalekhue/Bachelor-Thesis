@@ -34,6 +34,7 @@ public class GameLogic : MonoBehaviour {
     int entResult;                  // entered rusult
 
     bool answered = true;
+    float timeStart;
 
 
 	// Use this for initialization
@@ -44,6 +45,7 @@ public class GameLogic : MonoBehaviour {
 
         if (!showTimer)
             timer.gameObject.SetActive(false);
+        timeStart = Time.time;
 
         if (!showScore)
             score.gameObject.SetActive(false);
@@ -53,9 +55,9 @@ public class GameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (timeLimit > 0 && showTimer && (timeLimit - Time.time) >= 0)
-            timer.text = (timeLimit - Time.time).ToString("N0");
-        if (timeLimit > 0 && (timeLimit - Time.time) <= 0)
+        if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
+            timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
+        if (timeLimit > 0 && (timeLimit + timeStart- - Time.time) <= 0)
         {
             GameManager.Instance.gameRunning = false;
             inputField.DeactivateInputField();
