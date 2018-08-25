@@ -34,6 +34,7 @@ public class GameManager{
 
     public int correctAnswers = 0;
     public int wrongAnswers = 0;
+    public int skippedAnswers = 0;
 
     public bool gameRunning = false;
 

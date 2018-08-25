@@ -11,6 +11,7 @@ public class GameLogic : MonoBehaviour {
     bool testing = false;
 
     [Header("UI")]
+    public TMP_Text timer;
     public TMP_Text score;
     public TMP_Text task;
     public TMP_InputField inputField;
@@ -19,6 +20,10 @@ public class GameLogic : MonoBehaviour {
     [Header("Settings")]
     public int intervalMin = 0;
     public int intervalMax = 10;    // exclusive
+    [SerializeField]
+    float timeLimit = 0;
+    public bool showTimer = true;
+    public bool showScore = true;
 
     int numberA; 
     int numberB;
@@ -32,27 +37,48 @@ public class GameLogic : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
+        GameManager.Instance.gameRunning = true;
+        if (timeLimit == 0)
+            timer.text = "infinite";
+
+        if (!showTimer)
+            timer.gameObject.SetActive(false);
+
+        if (!showScore)
+            score.gameObject.SetActive(false);
+
         eventSystem = FindObjectOfType<EventSystem>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-
-        if (answered || (testing && Input.GetKeyDown(KeyCode.Escape)))
+        if (timeLimit > 0 && showTimer && (timeLimit - Time.time) >= 0)
+            timer.text = (timeLimit - Time.time).ToString("N0");
+        if (timeLimit > 0 && (timeLimit - Time.time) <= 0)
         {
-            Task();
+            GameManager.Instance.gameRunning = false;
+            inputField.DeactivateInputField();
+            task.text = "end";
         }
-        if (!eventSystem.alreadySelecting)
+        if (GameManager.Instance.gameRunning)
         {
-            eventSystem.SetSelectedGameObject(inputField.gameObject);
+            if (answered)
+            {
+                Task();
+            }
+            if (!eventSystem.alreadySelecting)
+            {
+                eventSystem.SetSelectedGameObject(inputField.gameObject);
+            }
         }
-	}
+    }
 
     // Sets a new task up
     void Task()
     {
-        score.text = "Correct: " + GameManager.Instance.correctAnswers + " - Wrong:" + GameManager.Instance.wrongAnswers;
+        if(showScore)
+            score.text = "Correct:" + GameManager.Instance.correctAnswers + " Skipped:" + GameManager.Instance.skippedAnswers + " Wrong:" + GameManager.Instance.wrongAnswers;
 
         answered = false;
         numberA = Random.Range(intervalMin, intervalMax);
@@ -81,7 +107,10 @@ public class GameLogic : MonoBehaviour {
 
     public void Solve()
     {
-        if (inputField.text != null)
+        if (!GameManager.Instance.gameRunning)
+            return;
+
+        if (inputField.text.Length != 0)
         {
             entResult = int.Parse(inputField.text);
             if (entResult == expResult)
@@ -92,6 +121,10 @@ public class GameLogic : MonoBehaviour {
             {
                 GameManager.Instance.wrongAnswers++;
             }
+        }
+        else
+        {
+            GameManager.Instance.skippedAnswers++;
         }
         
         inputField.DeactivateInputField();
