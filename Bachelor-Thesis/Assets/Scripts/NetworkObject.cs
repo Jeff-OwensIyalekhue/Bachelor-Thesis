@@ -29,7 +29,7 @@ public class NetworkObject : NetworkBehaviour {
     public void CmdSetReady()
     {
         Debug.Log(gameObject.name + " is ready");
-        if(hasAuthority)
+        if(isLocalPlayer)
             ready = true;
     }
 }
