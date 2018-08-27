@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 
 public class MenuScript : MonoBehaviour {
-    
+
+    public TMP_Text text;
+
     NetworkManager networkManager;
     string sceneToLoad = "Game";
 
@@ -15,16 +18,41 @@ public class MenuScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (GameManager.Instance.everybodyReady)
+            StartGame();
 	}
+
+    public void SetReady()
+    {
+        text.text = "wait for others";
+        GameManager.Instance.clientReady = true;
+    }
 
     public void StartGame()
     {
+        GameManager.Instance.everybodyReady = false;
+        GameManager.Instance.clientReady = false;
+        StartCoroutine(StartCountdown());
+    }
+
+    IEnumerator StartCountdown()
+    {
+        text.text = "3";
+        yield return new WaitForSeconds(1);
+        text.text = "2";
+        yield return new WaitForSeconds(1);
+        text.text = "1";
+        yield return new WaitForSeconds(1);
+        text.text = "0";
+        yield return new WaitForSeconds(.1f);
+
         networkManager.ServerChangeScene(sceneToLoad);
     }
 
     public void EndGame()
     {
         networkManager.StopServer();
+        networkManager.StopClient();
         GameManager.Instance.EndGame();
     }
 

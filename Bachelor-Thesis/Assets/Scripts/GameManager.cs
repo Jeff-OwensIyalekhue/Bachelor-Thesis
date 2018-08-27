@@ -36,6 +36,9 @@ public class GameManager{
     public int wrongAnswers = 0;
     public int skippedAnswers = 0;
 
+    public bool clientReady = false;
+    public bool everybodyReady = false;
+
     public bool gameRunning = false;
 	// Use this for initialization
 	void Start () {

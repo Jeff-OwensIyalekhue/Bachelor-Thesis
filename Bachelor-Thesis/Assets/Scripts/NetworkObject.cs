@@ -6,30 +6,56 @@ using UnityEngine.Networking;
 public class NetworkObject : NetworkBehaviour {
 
     NetworkManager networkManager;
+    NetworkMenu networkMenu;
     [SyncVar]
     public int connectionID = -1;
     [SyncVar]
-    public bool ready;
+    public bool clientReady;
 	// Use this for initialization
 	void Start () {
+        DontDestroyOnLoad(this);
+
         networkManager = FindObjectOfType<NetworkManager>();
+        networkMenu = FindObjectOfType<NetworkMenu>();
+
         connectionID += networkManager.numPlayers;
-        this.gameObject.name = "NetworkObject" + connectionID;
+        this.gameObject.name = "NetworkObject " + connectionID;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.R))
+
+        if (isLocalPlayer)
         {
-            if (isLocalPlayer)
-                CmdSetReady();
+            if (GameManager.Instance.clientReady && !GameManager.Instance.everybodyReady)
+            {
+                if(!clientReady)
+                    CmdSetReady();
+            }
+            if (clientReady)
+            {
+                if (isServer)
+                {
+                    if (networkMenu.CheckIfEverybodyReady())
+                    {
+                        CmdSetReady();
+                        GameManager.Instance.everybodyReady = true;
+                    }
+                }
+            }
         }
     }
 
     [Command]
     public void CmdSetReady()
     {
+        if (clientReady)
+        {
+            clientReady = false;
+            Debug.Log(gameObject.name + " is not ready");
+            return;
+        }
         Debug.Log(gameObject.name + " is ready");
-        ready = true;
+        clientReady = true;
     }
 }
