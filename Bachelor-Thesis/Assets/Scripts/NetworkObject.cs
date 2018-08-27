@@ -21,7 +21,8 @@ public class NetworkObject : NetworkBehaviour {
 	void Update () {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            CmdSetReady();
+            if (isLocalPlayer)
+                CmdSetReady();
         }
     }
 
@@ -29,7 +30,6 @@ public class NetworkObject : NetworkBehaviour {
     public void CmdSetReady()
     {
         Debug.Log(gameObject.name + " is ready");
-        if(isLocalPlayer)
-            ready = true;
+        ready = true;
     }
 }
