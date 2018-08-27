@@ -1,40 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
 
 public class MenuScript : MonoBehaviour {
     
-    int sceneToLoad = 1;
+    NetworkManager networkManager;
+    string sceneToLoad = "Game";
 
-	// Use this for initialization
-	void Start () {
-		
+    // Use this for initialization
+    void Start () {
+        networkManager = FindObjectOfType<NetworkManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
     public void StartGame()
     {
-        
-        LoadSceneByID(sceneToLoad);
+        networkManager.ServerChangeScene(sceneToLoad);
+    }
+
+    public void EndGame()
+    {
+        networkManager.StopServer();
+        GameManager.Instance.EndGame();
     }
 
     public void SetSceneToLoad(int i)
     {
-        sceneToLoad = i + 1;
-    }
-
-    public void LoadSceneByID(int i)
-    {
-        SceneManager.LoadScene(i);
-    }
-
-    public void LoadSceneByName(string s)
-    {
-        SceneManager.LoadScene(s);
+        switch (i)
+        {
+            case 0:
+                networkManager.StartHost();
+                sceneToLoad = "Game";
+                break;
+            default:
+                Debug.Log("Default Case - invalid scene case -> set Game as scene");
+                sceneToLoad = "Game";
+                break;
+        }
     }
 }
