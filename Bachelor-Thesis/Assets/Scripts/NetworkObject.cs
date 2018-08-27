@@ -7,31 +7,29 @@ public class NetworkObject : NetworkBehaviour {
 
     NetworkManager networkManager;
     [SyncVar]
-    public int id = -1;
+    public int connectionID = -1;
     [SyncVar]
     public bool ready;
 	// Use this for initialization
 	void Start () {
         networkManager = FindObjectOfType<NetworkManager>();
-        id += networkManager.numPlayers;
-        //if(isLocalPlayer == true)
-        //{
-            if (isServer)
-                this.gameObject.name = "NetworkObject" + id + "[Server]";
-            else if (isClient)
-                gameObject.name = "NetworkObject" + id + "[Client]";
-        //}
-        //else
-        //{
-        //    if (isClient)
-        //        gameObject.name = "NetworkObject" + id + "[Client]";
-        //    if (isServer)
-        //        this.gameObject.name = "NetworkObject" + id + "[Server]";
-        //}
+        connectionID += networkManager.numPlayers;
+        this.gameObject.name = "NetworkObject" + connectionID;
     }
 	
 	// Update is called once per frame
 	void Update () {
-	}
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            CmdSetReady();
+        }
+    }
 
+    [Command]
+    public void CmdSetReady()
+    {
+        Debug.Log(gameObject.name + " is ready");
+        if(hasAuthority)
+            ready = true;
+    }
 }
