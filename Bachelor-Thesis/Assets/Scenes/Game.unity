@@ -380,6 +380,18 @@ Prefab:
       propertyPath: showScore
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1215309035375182, guid: 8037cca6c63bf344b95b1eec2a7b5fc0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1714772259593978, guid: 8037cca6c63bf344b95b1eec2a7b5fc0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1918269508575488, guid: 8037cca6c63bf344b95b1eec2a7b5fc0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8037cca6c63bf344b95b1eec2a7b5fc0, type: 2}
   m_IsPrefabAsset: 0

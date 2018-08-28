@@ -6,17 +6,16 @@ using UnityEngine.Networking;
 public class NetworkObject : NetworkBehaviour {
 
     NetworkManager networkManager;
-    NetworkMenu networkMenu;
     [SyncVar]
     public int connectionID = -1;
     [SyncVar]
-    public bool clientReady;
+    public bool clientReady = false;
+
 	// Use this for initialization
 	void Start () {
         DontDestroyOnLoad(this);
 
         networkManager = FindObjectOfType<NetworkManager>();
-        networkMenu = FindObjectOfType<NetworkMenu>();
 
         connectionID += networkManager.numPlayers;
         this.gameObject.name = "NetworkObject " + connectionID;
@@ -27,21 +26,29 @@ public class NetworkObject : NetworkBehaviour {
 
         if (isLocalPlayer)
         {
-            if (GameManager.Instance.clientReady && !GameManager.Instance.everybodyReady)
+            if(!GameManager.Instance.startPressed && clientReady)
             {
-                if(!clientReady)
-                    CmdSetReady();
+                CmdSetReady();
+                GameManager.Instance.gmClientReady = false;
             }
-            if (clientReady)
+            if (GameManager.Instance.startPressed && !GameManager.Instance.gmClientReady)
             {
-                if (isServer)
+                if (!clientReady)
                 {
-                    if (networkMenu.CheckIfEverybodyReady())
-                    {
-                        CmdSetReady();
-                        GameManager.Instance.everybodyReady = true;
-                    }
+                    CmdSetReady();
+                    GameManager.Instance.gmClientReady = true;
                 }
+            }
+
+            if(GameManager.Instance.everybodyReady)
+            {
+                CmdSetReady();
+                GameManager.Instance.everybodyReady = false;
+                GameManager.Instance.gmClientReady = false;
+                GameManager.Instance.startPressed = false;
+                if(isServer)
+                    networkManager.ServerChangeScene("Game");
+
             }
         }
     }
@@ -55,7 +62,7 @@ public class NetworkObject : NetworkBehaviour {
             Debug.Log(gameObject.name + " is not ready");
             return;
         }
-        Debug.Log(gameObject.name + " is ready");
         clientReady = true;
+        Debug.Log(gameObject.name + " is ready");
     }
 }

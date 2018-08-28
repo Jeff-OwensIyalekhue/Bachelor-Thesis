@@ -36,8 +36,10 @@ public class GameManager{
     public int wrongAnswers = 0;
     public int skippedAnswers = 0;
 
-    public bool clientReady = false;
+    public bool startPressed = false;
+    public bool gmClientReady = false;
     public bool everybodyReady = false;
+    public int amountPlayerReady = 0;
 
     public bool gameRunning = false;
 	// Use this for initialization

@@ -36,38 +36,14 @@ public class GameLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        GameManager.Instance.gameRunning = true;
-        
-        // if timeLimit is set is set to a "invalid time" set, show
-        if (timeLimit <= 0)
-            timer.text = "no time limit";
-
-        if (!showTimer)
-            timer.gameObject.SetActive(false);
-        timeStart = Time.time;
-
-        if (!showScore)
-            score.gameObject.SetActive(false);
+        StartCoroutine(StartCountdown());
 
         eventSystem = FindObjectOfType<EventSystem>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        
-        // display the remaining time if a time limit is set
-        if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
-            timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
-
-        // if time limit is reached ends the game and returns to menu
-        if (timeLimit > 0 && (timeLimit + timeStart - Time.time) <= 0)
-        {
-            GameManager.Instance.gameRunning = false;
-            inputField.DeactivateInputField();
-            task.text = "end";
-            StartCoroutine(End());
-        }
-
+      
         // if there is no time limit, end the game when escape is pressed
         if(timeLimit <= 0 && Input.GetKeyDown(KeyCode.Escape))
         {
@@ -78,6 +54,19 @@ public class GameLogic : MonoBehaviour {
         // checks new task should be asked
         if (GameManager.Instance.gameRunning)
         {
+            // display the remaining time if a time limit is set
+            if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
+                timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
+
+            // if time limit is reached ends the game and returns to menu
+            if (timeLimit > 0 && (timeLimit + timeStart - Time.time) <= 0)
+            {
+                GameManager.Instance.gameRunning = false;
+                inputField.DeactivateInputField();
+                task.text = "end";
+                StartCoroutine(End());
+            }
+
             if (answered)
             {
                 Task();
@@ -89,6 +78,31 @@ public class GameLogic : MonoBehaviour {
                 eventSystem.SetSelectedGameObject(inputField.gameObject);
             }
         }
+    }
+
+    IEnumerator StartCountdown()
+    {
+        timer.text = "<color=red>3</color>";
+        yield return new WaitForSeconds(1);
+        timer.text = "<color=yellow>2</color>";
+        yield return new WaitForSeconds(1);
+        timer.text = "<color=green>1</color>";
+        yield return new WaitForSeconds(1);
+
+        // if timeLimit is set is set to a "invalid time" set, show
+        if (timeLimit <= 0)
+            timer.text = "no time limit";
+
+
+        if (!showTimer)
+            timer.gameObject.SetActive(false);
+        timeStart = Time.time;
+
+        if (!showScore)
+            score.gameObject.SetActive(false);
+
+        GameManager.Instance.gameRunning = true;
+
     }
 
     // returns to the menu with a little delay
