@@ -9,10 +9,17 @@ public class GameLogic : MonoBehaviour {
 
     [Header("UI")]
     public TMP_Text timer;
-    public TMP_Text score;
-    public TMP_Text task;
+    public TMP_Text numberAText;
+    public TMP_Text opText;
+    public TMP_Text numberBText;
     public TMP_InputField inputField;
     EventSystem eventSystem;
+    public TMP_Text score;
+
+    [Header("Task Transitions")]
+    public Animator anim;
+    public AnimationClip[] entryClip;
+    public AnimationClip[] exitClip;
 
     [Header("Settings")]
     public int intervalMin = 0;
@@ -21,6 +28,9 @@ public class GameLogic : MonoBehaviour {
     float timeLimit = 0;            // if value <= 0: no time limit
     public bool showTimer = true;
     public bool showScore = true;
+
+    [Header("")]
+    public bool testing = false;
 
     int numberA; 
     int numberB;
@@ -53,7 +63,7 @@ public class GameLogic : MonoBehaviour {
             StartCoroutine(StartCountdown());
 
         // checks new task should be asked
-        if (GameManager.Instance.gameRunning)
+        if (GameManager.Instance.gameRunning || testing)
         {
             // display the remaining time if a time limit is set
             if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
@@ -64,7 +74,7 @@ public class GameLogic : MonoBehaviour {
             {
                 GameManager.Instance.gameRunning = false;
                 inputField.DeactivateInputField();
-                task.text = "end";
+                timer.text = "end";
                 NetworkSync.Load();
             }
 
@@ -107,46 +117,58 @@ public class GameLogic : MonoBehaviour {
 
     }
 
-    // returns to the menu with a little delay
-    //IEnumerator End()
-    //{
-    //    yield return new WaitForSeconds(1);
-    //    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-    //}
-
     // Sets a new task up
     void Task()
     {
         if(showScore)
-            score.text = "Correct:" + GameManager.Instance.correctAnswers + " Skipped:" + GameManager.Instance.skippedAnswers + " Wrong:" + GameManager.Instance.wrongAnswers;
+            score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
 
         answered = false;
         numberA = Random.Range(intervalMin, intervalMax);
         numberB = Random.Range(intervalMin, intervalMax);
         op = Random.Range(0, 3);
-
+        //Debug.Break();
+        StartCoroutine(TaskEntry());
+    }
+    IEnumerator TaskEntry()
+    {
+        numberAText.text = numberA.ToString();
+        numberBText.text = numberB.ToString();
         switch (op)
         {
             case 0:
                 expResult = numberA + numberB;
-                task.text = numberA + " <color=green> + </color> " + numberB;
+                opText.text = " <color=green> + </color> ";
                 break;
             case 1:
                 expResult = numberA - numberB;
-                task.text = numberA + " <color=red> - </color> " + numberB;
+                opText.text = " <color=red> - </color> ";
                 break;
             case 2:
                 expResult = numberA * numberB;
-                task.text = numberA + " <color=blue> * </color> " + numberB;
+                opText.text = " <color=#00aaff> * </color> ";
                 break;
             default:
                 Debug.Log("unexpected value as operaor");
                 break;
         }
+
+        int r = Random.Range(0, entryClip.Length);
+
+        anim.SetTrigger(entryClip[r].name);
+        yield return new WaitForSeconds(entryClip[r].length / 2);
+
+        if (!numberAText.gameObject.activeSelf)
+            numberAText.gameObject.SetActive(true);
+        if (!numberBText.gameObject.activeSelf)
+            numberBText.gameObject.SetActive(true);
+        if (!opText.gameObject.activeSelf)
+            opText.gameObject.SetActive(true);
     }
 
     public void Solve()
     {
+        if(!testing)
         if (!GameManager.Instance.gameRunning)
             return;
 
@@ -167,10 +189,21 @@ public class GameLogic : MonoBehaviour {
             GameManager.Instance.skippedAnswers++;
         }
         
+        StartCoroutine(TaskExit());
+    }
+    IEnumerator TaskExit()
+    {
+        int r = Random.Range(0, exitClip.Length);
+        anim.SetTrigger(exitClip[r].name);
+        yield return new WaitForSeconds(exitClip[r].length);
+
+        numberAText.gameObject.SetActive(false);
+        numberBText.gameObject.SetActive(false);
+        opText.gameObject.SetActive(false);
+
         inputField.DeactivateInputField();
         inputField.text = "";
         inputField.ActivateInputField();
-
-        Task();
+        answered = true;
     }
 }
