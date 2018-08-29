@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class NetworkObject : NetworkBehaviour {
-
+    
     NetworkManager networkManager;
     [SyncVar]
     public int connectionID = -1;
@@ -46,7 +46,7 @@ public class NetworkObject : NetworkBehaviour {
                 GameManager.Instance.everybodyReady = false;
                 GameManager.Instance.gmClientReady = false;
                 GameManager.Instance.startPressed = false;
-                if(isServer)
+                if (isServer)
                     networkManager.ServerChangeScene("Game");
 
             }

@@ -36,8 +36,6 @@ public class GameLogic : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-        StartCoroutine(StartCountdown());
-
         eventSystem = FindObjectOfType<EventSystem>();
     }
 	
@@ -50,6 +48,9 @@ public class GameLogic : MonoBehaviour {
             GameManager.Instance.gameRunning = false;
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
+
+        if(GameManager.Instance.preGameRunning)
+            StartCoroutine(StartCountdown());
 
         // checks new task should be asked
         if (GameManager.Instance.gameRunning)
@@ -64,7 +65,7 @@ public class GameLogic : MonoBehaviour {
                 GameManager.Instance.gameRunning = false;
                 inputField.DeactivateInputField();
                 task.text = "end";
-                StartCoroutine(End());
+                NetworkSync.Load();
             }
 
             if (answered)
@@ -82,6 +83,7 @@ public class GameLogic : MonoBehaviour {
 
     IEnumerator StartCountdown()
     {
+        GameManager.Instance.preGameRunning = false;
         timer.text = "<color=red>3</color>";
         yield return new WaitForSeconds(1);
         timer.text = "<color=yellow>2</color>";
@@ -106,11 +108,11 @@ public class GameLogic : MonoBehaviour {
     }
 
     // returns to the menu with a little delay
-    IEnumerator End()
-    {
-        yield return new WaitForSeconds(1);
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-    }
+    //IEnumerator End()
+    //{
+    //    yield return new WaitForSeconds(1);
+    //    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    //}
 
     // Sets a new task up
     void Task()

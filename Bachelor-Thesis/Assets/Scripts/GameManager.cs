@@ -41,6 +41,7 @@ public class GameManager{
     public bool everybodyReady = false;
     public int amountPlayerReady = 0;
 
+    public bool preGameRunning = false;
     public bool gameRunning = false;
 	// Use this for initialization
 	void Start () {
