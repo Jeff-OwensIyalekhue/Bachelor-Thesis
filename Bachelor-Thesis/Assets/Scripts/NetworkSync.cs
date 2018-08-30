@@ -67,7 +67,7 @@ public class NetworkSync : NetworkBehaviour {
     IEnumerator EndTransition()
     {
         endTransition = false;
-        canvas.sortingOrder = 1;
+        canvas.sortingOrder = 2;
         anim.SetTrigger("Start");
         yield return new WaitForSeconds((clip.length / 2) + 1);
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
@@ -79,7 +79,7 @@ public class NetworkSync : NetworkBehaviour {
     IEnumerator StartTransition()
     {
         startTransition = true;
-        canvas.sortingOrder = 1;
+        canvas.sortingOrder = 2;
         anim.SetTrigger("Start");
         yield return new WaitForSeconds(clip.length / 2);
         GameManager.Instance.everybodyReady = true;
