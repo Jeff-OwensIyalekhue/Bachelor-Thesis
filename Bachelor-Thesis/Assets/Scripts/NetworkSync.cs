@@ -71,6 +71,8 @@ public class NetworkSync : NetworkBehaviour {
         anim.SetTrigger("Start");
         yield return new WaitForSeconds((clip.length / 2) + 1);
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        //if (isServer)
+        //    networkManager.ServerChangeScene("Menu");
         yield return new WaitForSeconds((clip.length / 2)-1);
         canvas.sortingOrder = -1;
     }
@@ -81,8 +83,8 @@ public class NetworkSync : NetworkBehaviour {
         anim.SetTrigger("Start");
         yield return new WaitForSeconds(clip.length / 2);
         GameManager.Instance.everybodyReady = true;
-        yield return new WaitForSeconds(clip.length / 2);
         GameManager.Instance.preGameRunning = true;
+        yield return new WaitForSeconds(clip.length / 2);
         canvas.sortingOrder = -1;
         startTransition = false;
     }

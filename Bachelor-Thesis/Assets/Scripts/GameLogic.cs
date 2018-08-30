@@ -15,11 +15,14 @@ public class GameLogic : MonoBehaviour {
     public TMP_InputField inputField;
     EventSystem eventSystem;
     public TMP_Text score;
+    public TMP_Text scoreNotification;
+    public Animator scoreNotificationAnim;
 
     [Header("Task Transitions")]
     public Animator anim;
     public AnimationClip[] entryClip;
     public AnimationClip[] exitClip;
+    bool transition = false;
 
     [Header("Settings")]
     public int intervalMin = 0;
@@ -51,17 +54,21 @@ public class GameLogic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-      
+
+        if (GameManager.Instance.preGameRunning)
+        {
+            StartCoroutine(StartCountdown());
+            return;
+        }
+
+        if (!GameManager.Instance.gameRunning)
+            return;
         // if there is no time limit, end the game when escape is pressed
         if(timeLimit <= 0 && Input.GetKeyDown(KeyCode.Escape))
         {
             GameManager.Instance.gameRunning = false;
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
-
-        if(GameManager.Instance.preGameRunning)
-            StartCoroutine(StartCountdown());
-
         // checks new task should be asked
         if (GameManager.Instance.gameRunning || testing)
         {
@@ -120,8 +127,11 @@ public class GameLogic : MonoBehaviour {
     // Sets a new task up
     void Task()
     {
-        if(showScore)
+        transition = true;
+        if (showScore)
+        {
             score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
+        }
 
         answered = false;
         numberA = Random.Range(intervalMin, intervalMax);
@@ -164,13 +174,19 @@ public class GameLogic : MonoBehaviour {
             numberBText.gameObject.SetActive(true);
         if (!opText.gameObject.activeSelf)
             opText.gameObject.SetActive(true);
+
+        transition = false;
     }
 
     public void Solve()
     {
-        if(!testing)
-        if (!GameManager.Instance.gameRunning)
+        if (!testing)
+            if (!GameManager.Instance.gameRunning)
+                return;
+        if (transition)
             return;
+
+        transition = true;
 
         if (inputField.text.Length != 0)
         {
@@ -178,10 +194,12 @@ public class GameLogic : MonoBehaviour {
             if (entResult == expResult)
             {
                 GameManager.Instance.correctAnswers++;
+                scoreNotification.text = "<color=green>+1";
             }
             else
             {
                 GameManager.Instance.wrongAnswers++;
+                scoreNotification.text = "<color=red>-1";
             }
         }
         else
@@ -204,6 +222,8 @@ public class GameLogic : MonoBehaviour {
         inputField.DeactivateInputField();
         inputField.text = "";
         inputField.ActivateInputField();
+        scoreNotificationAnim.SetTrigger("Up");
         answered = true;
+        transition = false;
     }
 }
