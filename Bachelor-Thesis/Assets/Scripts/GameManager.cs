@@ -43,6 +43,10 @@ public class GameManager{
     public bool everybodyReady = false;
     public int amountPlayerReady = 0;
 
+    public int gameMode = 0;            // 0:= SinglePlayer & HalbCoop; 1:= Versus
+    public int enemyScore = 0;
+    public bool enemyScored = false;
+
     public bool preGameRunning = false;
     public bool gameRunning = false;
 	// Use this for initialization

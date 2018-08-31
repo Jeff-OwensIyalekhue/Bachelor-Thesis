@@ -45,18 +45,8 @@ public class MenuScript : MonoBehaviour {
         GameManager.Instance.EndGame();
     }
 
-    public void SetSceneToLoad(int i)
+    public void SetMode(int i)
     {
-        switch (i)
-        {
-            case 0:
-                networkManager.StartHost();
-                sceneToLoad = "Game";
-                break;
-            default:
-                Debug.Log("Default Case - invalid scene case -> set Game as scene");
-                sceneToLoad = "Game";
-                break;
-        }
+        GameManager.Instance.gameMode = i;
     }
 }

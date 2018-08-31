@@ -67,23 +67,37 @@ public class GameLogic : MonoBehaviour {
         if(timeLimit <= 0 && Input.GetKeyDown(KeyCode.Escape))
         {
             GameManager.Instance.gameRunning = false;
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+
+            GameManager.Instance.correctAnswers = 0;
+            GameManager.Instance.wrongAnswers = 0;
+            GameManager.Instance.skippedAnswers = 0;
+
+            NetworkSync.Load();
         }
         // checks new task should be asked
         if (GameManager.Instance.gameRunning || testing)
         {
-            // display the remaining time if a time limit is set
-            if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
-                timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
-
             // if time limit is reached ends the game and returns to menu
             if (timeLimit > 0 && (timeLimit + timeStart - Time.time) <= 0)
             {
                 GameManager.Instance.gameRunning = false;
                 inputField.DeactivateInputField();
                 timer.text = "end";
+
+                GameManager.Instance.correctAnswers = 0;
+                GameManager.Instance.wrongAnswers = 0;
+                GameManager.Instance.skippedAnswers = 0;
+
                 NetworkSync.Load();
             }
+
+            // display the remaining time if a time limit is set
+            if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
+                timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
+
+            if(GameManager.Instance.enemyScored)
+                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.enemyScore;
+
 
             if (answered)
             {
@@ -130,7 +144,13 @@ public class GameLogic : MonoBehaviour {
         transition = true;
         if (showScore)
         {
+            if(GameManager.Instance.gameMode == 1)
+            {
+                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.enemyScore;
+            }
+            else
             score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
+            scoreNotificationAnim.SetTrigger("Up");
         }
 
         answered = false;
@@ -205,6 +225,7 @@ public class GameLogic : MonoBehaviour {
         else
         {
             GameManager.Instance.skippedAnswers++;
+            scoreNotification.text = "+0";
         }
         
         StartCoroutine(TaskExit());
@@ -222,7 +243,6 @@ public class GameLogic : MonoBehaviour {
         inputField.DeactivateInputField();
         inputField.text = "";
         inputField.ActivateInputField();
-        scoreNotificationAnim.SetTrigger("Up");
         answered = true;
         transition = false;
     }

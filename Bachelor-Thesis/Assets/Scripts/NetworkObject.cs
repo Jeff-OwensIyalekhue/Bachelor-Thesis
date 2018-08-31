@@ -4,7 +4,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class NetworkObject : NetworkBehaviour {
-    
+
+    [SyncVar]
+    public int score = 0;
+
+    [Header("Network Info")]
     NetworkManager networkManager;
     [SyncVar]
     public int connectionID = -1;
@@ -26,7 +30,11 @@ public class NetworkObject : NetworkBehaviour {
 
         if (isLocalPlayer)
         {
-            if(!GameManager.Instance.startPressed && clientReady)
+            if (GameManager.Instance.gameRunning)
+                if (this.score != GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
+                    CmdScoreUpdate(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers);
+
+            if (!GameManager.Instance.startPressed && clientReady)
             {
                 CmdSetReady();
                 GameManager.Instance.gmClientReady = false;
@@ -51,6 +59,26 @@ public class NetworkObject : NetworkBehaviour {
 
             }
         }
+        else
+        {
+            if (GameManager.Instance.gameRunning)
+            {
+                if(GameManager.Instance.gameMode == 1)
+                {
+                    if(score != GameManager.Instance.enemyScore)
+                    {
+                        GameManager.Instance.enemyScored = true;
+                        GameManager.Instance.enemyScore = score;
+                    }
+                }
+            }
+        }
+    }
+
+    [Command]
+    public void CmdScoreUpdate(int i)
+    {
+        score = i;
     }
 
     [Command]

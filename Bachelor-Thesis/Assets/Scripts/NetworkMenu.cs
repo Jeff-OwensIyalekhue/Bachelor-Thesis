@@ -12,6 +12,8 @@ public class NetworkMenu : MonoBehaviour {
     public GameObject inputPanel;
     public Canvas canvas;
 
+    bool isHost = false;
+
 	// Use this for initialization
 	void Start () {
         if (GameManager.Instance.isConnected)
@@ -32,6 +34,7 @@ public class NetworkMenu : MonoBehaviour {
     public void PlayAsHost()
     {
         networkManager.StartHost();
+        isHost = true;
         GameManager.Instance.isConnected = true;
         inputPanel.SetActive(false);
         //canvas.sortingOrder = -2;
@@ -58,5 +61,23 @@ public class NetworkMenu : MonoBehaviour {
             networkInfo.text = networkManager.networkAddress + "\n" + networkManager.networkPort;
         else
             networkInfo.text = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName())[1] + "\n" + networkManager.networkPort;
+    }
+
+    public void Disconnect()
+    {
+        if (!GameManager.Instance.isConnected)
+            return;
+        GameManager.Instance.isConnected = false;
+
+        if (isHost)
+        {
+            isHost = false;
+            networkManager.StopHost();
+        }
+        else
+        {
+            networkManager.StopClient();
+        }
+        inputPanel.SetActive(true);
     }
 }
