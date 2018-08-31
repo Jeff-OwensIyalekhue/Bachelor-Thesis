@@ -27,6 +27,8 @@ public class NetworkSync : NetworkBehaviour {
     bool startTransition = false;
     static bool endTransition = false;
 
+    bool fakeOpponent = false;
+
     public Canvas canvas;
     public Animator anim;
     public AnimationClip clip;
@@ -57,9 +59,59 @@ public class NetworkSync : NetworkBehaviour {
             }
         }
 
+        if(networkManager.numPlayers == 1)
+        {
+            if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 1)
+            {
+                if (!fakeOpponent)
+                {
+                    fakeOpponent = true;
+                    StartCoroutine(FakePlayer());
+                }
+            }
+        }
+
         if (endTransition)
             StartCoroutine(EndTransition());
     }
+
+    IEnumerator FakePlayer()
+    {
+        float r = 0;
+        while (GameManager.Instance.gameRunning)
+        {
+            yield return new WaitForSeconds(6);
+            r = Random.Range(0f, 1f);
+            if(GameManager.Instance.enemyScore < GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
+            {
+                if (r <= 0.7)
+                {
+                    GameManager.Instance.enemyScore++;
+                    GameManager.Instance.enemyScored = true;
+                }
+                else if(r > 0.95)
+                {
+                    GameManager.Instance.enemyScore--;
+                    GameManager.Instance.enemyScored = true;
+                }
+            }
+            else
+            {
+                if (r <= 0.4)
+                {
+                    GameManager.Instance.enemyScore++;
+                    GameManager.Instance.enemyScored = true;
+                }
+                else if (r > 0.9)
+                {
+                    GameManager.Instance.enemyScore--;
+                    GameManager.Instance.enemyScored = true;
+                }
+            }
+        }
+        fakeOpponent = false;
+    }
+
     public static void Load()
     {
         endTransition = true;

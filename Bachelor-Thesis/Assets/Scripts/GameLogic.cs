@@ -71,6 +71,7 @@ public class GameLogic : MonoBehaviour {
             GameManager.Instance.correctAnswers = 0;
             GameManager.Instance.wrongAnswers = 0;
             GameManager.Instance.skippedAnswers = 0;
+            GameManager.Instance.enemyScore = 0;
 
             NetworkSync.Load();
         }
@@ -87,6 +88,7 @@ public class GameLogic : MonoBehaviour {
                 GameManager.Instance.correctAnswers = 0;
                 GameManager.Instance.wrongAnswers = 0;
                 GameManager.Instance.skippedAnswers = 0;
+                GameManager.Instance.enemyScore = 0;
 
                 NetworkSync.Load();
             }
@@ -95,13 +97,15 @@ public class GameLogic : MonoBehaviour {
             if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
                 timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
 
-            if(GameManager.Instance.enemyScored)
-                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.enemyScore;
-
-
             if (answered)
             {
                 Task();
+            }
+
+            if (GameManager.Instance.enemyScored)
+            {
+                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.enemyScore;
+                GameManager.Instance.enemyScored = false;
             }
 
             // ensures that the inputfield is selected by the event system

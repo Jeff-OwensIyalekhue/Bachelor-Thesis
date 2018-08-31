@@ -7,6 +7,7 @@ using TMPro;
 public class MenuScript : MonoBehaviour {
 
     public TMP_Text text;
+    public TMP_Dropdown dropdown;
 
     NetworkManager networkManager;
     string sceneToLoad = "Game";
@@ -14,6 +15,7 @@ public class MenuScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         networkManager = FindObjectOfType<NetworkManager>();
+        dropdown.value = GameManager.Instance.gameMode;
 	}
 	
 	// Update is called once per frame
