@@ -10,7 +10,6 @@ public class MenuScript : MonoBehaviour {
     public TMP_Dropdown dropdown;
 
     NetworkManager networkManager;
-    string sceneToLoad = "Game";
 
     // Use this for initialization
     void Start () {
@@ -20,9 +19,9 @@ public class MenuScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameManager.Instance.everybodyReady)
-            StartGame();
-	}
+        if (dropdown.value != GameManager.Instance.gameMode)
+            dropdown.value = GameManager.Instance.gameMode;
+    }
 
     public void SetReady()
     {
@@ -32,14 +31,11 @@ public class MenuScript : MonoBehaviour {
             GameManager.Instance.startPressed = false;
             return;
         }
-        text.text = "wait for others";
+        if(GameManager.Instance.gameMode != 0)
+            text.text = "wait for others";
         GameManager.Instance.startPressed = true;
     }
-
-    public void StartGame()
-    { 
-    }
-
+    
     public void EndGame()
     {
         networkManager.StopServer();

@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 
 public class GameLogic : MonoBehaviour {
 
+    #region Vars
     [Header("UI")]
     public TMP_Text timer;
     public TMP_Text numberAText;
@@ -38,17 +39,22 @@ public class GameLogic : MonoBehaviour {
     int numberA; 
     int numberB;
     int op;                         // operator: 0 := addition; 1 := subtraction; 2 := multiplication; else := error
+    string opClean;
     [SerializeField]
     int expResult;                  // expected result = numberA op numberB
 
     int entResult;                  // entered rusult
 
+    float timeTask;
+
     bool answered = true;
     float timeStart;
+    #endregion
 
-
-	// Use this for initialization
-	void Awake () {
+    // Use this for initialization
+    void Awake () {
+        int r = Random.Range(0, 100);
+        GameManager.Instance.participant = new ParticipantData(r, GameManager.Instance.gameMode);
         eventSystem = FindObjectOfType<EventSystem>();
     }
 	
@@ -63,11 +69,19 @@ public class GameLogic : MonoBehaviour {
 
         if (!GameManager.Instance.gameRunning)
             return;
+
         // if there is no time limit, end the game when escape is pressed
         if(timeLimit <= 0 && Input.GetKeyDown(KeyCode.Escape))
         {
             GameManager.Instance.gameRunning = false;
 
+            // Enter participant information
+            GameManager.Instance.participant.correctAnswers = GameManager.Instance.correctAnswers;
+            GameManager.Instance.participant.wrongAnswers = GameManager.Instance.wrongAnswers;
+            GameManager.Instance.participant.skippedTasks = GameManager.Instance.skippedAnswers;
+            GameManager.Instance.participant.timePlayed = Time.time - timeStart;
+
+            // Reset GameManager Data
             GameManager.Instance.correctAnswers = 0;
             GameManager.Instance.wrongAnswers = 0;
             GameManager.Instance.skippedAnswers = 0;
@@ -75,7 +89,6 @@ public class GameLogic : MonoBehaviour {
 
             NetworkSync.Load();
         }
-        // checks new task should be asked
         if (GameManager.Instance.gameRunning || testing)
         {
             // if time limit is reached ends the game and returns to menu
@@ -85,6 +98,14 @@ public class GameLogic : MonoBehaviour {
                 inputField.DeactivateInputField();
                 timer.text = "end";
 
+                // Enter participant information
+                GameManager.Instance.participant.correctAnswers = GameManager.Instance.correctAnswers;
+                GameManager.Instance.participant.wrongAnswers = GameManager.Instance.wrongAnswers;
+                GameManager.Instance.participant.skippedTasks = GameManager.Instance.skippedAnswers;
+                GameManager.Instance.participant.timePlayed = Time.time - timeStart;
+                GameManager.Instance.CreateUserData("Particpant" + GameManager.Instance.participant.identification);
+
+                // Reset GameManager Data
                 GameManager.Instance.correctAnswers = 0;
                 GameManager.Instance.wrongAnswers = 0;
                 GameManager.Instance.skippedAnswers = 0;
@@ -97,6 +118,7 @@ public class GameLogic : MonoBehaviour {
             if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
                 timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
 
+        // checks if new task should be asked
             if (answered)
             {
                 Task();
@@ -148,7 +170,7 @@ public class GameLogic : MonoBehaviour {
         transition = true;
         if (showScore)
         {
-            if(GameManager.Instance.gameMode == 1)
+            if(GameManager.Instance.gameMode == 2)
             {
                 score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.enemyScore;
             }
@@ -173,14 +195,17 @@ public class GameLogic : MonoBehaviour {
             case 0:
                 expResult = numberA + numberB;
                 opText.text = " <color=green> + </color> ";
+                opClean = " + ";
                 break;
             case 1:
                 expResult = numberA - numberB;
                 opText.text = " <color=red> - </color> ";
+                opClean = " - ";
                 break;
             case 2:
                 expResult = numberA * numberB;
                 opText.text = " <color=#00aaff> * </color> ";
+                opClean = " * ";
                 break;
             default:
                 Debug.Log("unexpected value as operaor");
@@ -198,6 +223,8 @@ public class GameLogic : MonoBehaviour {
             numberBText.gameObject.SetActive(true);
         if (!opText.gameObject.activeSelf)
             opText.gameObject.SetActive(true);
+
+        timeTask = Time.time;
 
         transition = false;
     }
@@ -219,17 +246,20 @@ public class GameLogic : MonoBehaviour {
             {
                 GameManager.Instance.correctAnswers++;
                 scoreNotification.text = "<color=green>+1";
+                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, GameManager.Instance.enemyScore));
             }
             else
             {
                 GameManager.Instance.wrongAnswers++;
                 scoreNotification.text = "<color=red>-1";
+                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, GameManager.Instance.enemyScore));
             }
         }
         else
         {
             GameManager.Instance.skippedAnswers++;
             scoreNotification.text = "+0";
+            GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, GameManager.Instance.enemyScore));
         }
         
         StartCoroutine(TaskExit());

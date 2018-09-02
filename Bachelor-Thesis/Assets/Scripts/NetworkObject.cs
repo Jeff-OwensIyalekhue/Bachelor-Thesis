@@ -15,6 +15,9 @@ public class NetworkObject : NetworkBehaviour {
     [SyncVar]
     public bool clientReady = false;
 
+    [SyncVar]
+    int gameMode = 0;
+
 	// Use this for initialization
 	void Start () {
         DontDestroyOnLoad(this);
@@ -30,15 +33,21 @@ public class NetworkObject : NetworkBehaviour {
 
         if (isLocalPlayer)
         {
+            if (!GameManager.Instance.gameRunning)
+                if (gameMode != GameManager.Instance.gameMode)
+                    CmdModeUpdate(GameManager.Instance.gameMode);
+
             if (GameManager.Instance.gameRunning)
                 if (this.score != GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
                     CmdScoreUpdate(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers);
 
+            // set client unready if start is not pressed
             if (!GameManager.Instance.startPressed && clientReady)
             {
                 CmdSetReady();
                 GameManager.Instance.gmClientReady = false;
             }
+            // set client ready if start is pressed
             if (GameManager.Instance.startPressed && !GameManager.Instance.gmClientReady)
             {
                 if (!clientReady)
@@ -63,7 +72,7 @@ public class NetworkObject : NetworkBehaviour {
         {
             if (GameManager.Instance.gameRunning)
             {
-                if(GameManager.Instance.gameMode == 1)
+                if(GameManager.Instance.gameMode == 2)
                 {
                     if(score != GameManager.Instance.enemyScore)
                     {
@@ -72,7 +81,20 @@ public class NetworkObject : NetworkBehaviour {
                     }
                 }
             }
+            else
+            {
+                if (GameManager.Instance.nGameMode != gameMode)
+                {
+                    GameManager.Instance.nGameMode = GameManager.Instance.gameMode = gameMode;
+                }
+            }
         }
+    }
+
+    [Command]
+    public void CmdModeUpdate(int i)
+    {
+        gameMode = i;
     }
 
     [Command]
@@ -87,10 +109,10 @@ public class NetworkObject : NetworkBehaviour {
         if (clientReady)
         {
             clientReady = false;
-            Debug.Log(gameObject.name + " is not ready");
+            //Debug.Log(gameObject.name + " is not ready");
             return;
         }
         clientReady = true;
-        Debug.Log(gameObject.name + " is ready");
+        //Debug.Log(gameObject.name + " is ready");
     }
 }

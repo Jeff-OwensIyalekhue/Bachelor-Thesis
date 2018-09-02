@@ -14,8 +14,8 @@ public class NetworkMenu : MonoBehaviour {
 
     bool isHost = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         if (GameManager.Instance.isConnected)
             inputPanel.SetActive(false);
 
@@ -24,16 +24,20 @@ public class NetworkMenu : MonoBehaviour {
             networkInfo.text = networkManager.networkAddress + "\n" + networkManager.networkPort;
         else
             networkInfo.text = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName())[1] + "\n" + networkManager.networkPort;
+
+        if(isHost)
+            networkInfo.text += " (H)";
     }
 
     // Update is called once per frame
     void Update () {
-		
-	}
+
+    }
 
     public void PlayAsHost()
     {
         networkManager.StartHost();
+        networkInfo.text += " (H)";
         isHost = true;
         GameManager.Instance.isConnected = true;
         inputPanel.SetActive(false);

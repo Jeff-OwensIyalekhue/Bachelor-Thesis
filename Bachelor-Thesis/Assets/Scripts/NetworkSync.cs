@@ -42,26 +42,10 @@ public class NetworkSync : NetworkBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (!startTransition)
-        {
-            if (nO.Length != networkManager.numPlayers)
-                nO = FindObjectsOfType<NetworkObject>();
-
-            if (GameManager.Instance.gmClientReady)
-            {
-                Debug.Log("Looking if everybody is ready.");
-                for (int i = 0; i < nO.Length; i++)
-                {
-                    if (!nO[i].clientReady)
-                        return;
-                }
-                StartCoroutine(StartTransition());
-            }
-        }
 
         if(networkManager.numPlayers == 1)
         {
-            if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 1)
+            if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 2)
             {
                 if (!fakeOpponent)
                 {
@@ -71,12 +55,31 @@ public class NetworkSync : NetworkBehaviour {
             }
         }
 
+        // Checking if game can start
+        if (!startTransition)
+        {
+            if (nO.Length != networkManager.numPlayers)
+                nO = FindObjectsOfType<NetworkObject>();
+
+            if (GameManager.Instance.gmClientReady)
+            {
+                //Debug.Log("Looking if everybody is ready.");
+                for (int i = 0; i < nO.Length; i++)
+                {
+                    if (!nO[i].clientReady)
+                        return;
+                }
+                StartCoroutine(StartTransition());
+            }
+        }
+
         if (endTransition)
             StartCoroutine(EndTransition());
     }
 
     IEnumerator FakePlayer()
     {
+        Debug.Log("Fake opponent");
         float r = 0;
         while (GameManager.Instance.gameRunning)
         {
@@ -97,7 +100,7 @@ public class NetworkSync : NetworkBehaviour {
             }
             else
             {
-                if (r <= 0.4)
+                if (r <= 0.5)
                 {
                     GameManager.Instance.enemyScore++;
                     GameManager.Instance.enemyScored = true;
