@@ -17,6 +17,7 @@ public class NetworkObject : NetworkBehaviour {
 
     [SyncVar]
     int gameMode = 0;
+    
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +26,12 @@ public class NetworkObject : NetworkBehaviour {
         networkManager = FindObjectOfType<NetworkManager>();
 
         connectionID += networkManager.numPlayers;
-        this.gameObject.name = "NetworkObject " + connectionID;
+        this.gameObject.name = "NetworkObject " + (networkManager.numPlayers - 1);
+        GameManager.Instance.playerList.Add(this);
+        GameManager.Instance.playerListLength++;
+
+        if(isLocalPlayer)
+            GameManager.Instance.ownConnectionID = (networkManager.numPlayers - 1);
     }
 	
 	// Update is called once per frame
@@ -33,14 +39,20 @@ public class NetworkObject : NetworkBehaviour {
 
         if (isLocalPlayer)
         {
+            if(connectionID != GameManager.Instance.ownConnectionID)
+            {
+                GameManager.Instance.ownConnectionID = connectionID;
+                this.gameObject.name = "NetworkObject " + connectionID;
+            }
             if (!GameManager.Instance.gameRunning)
                 if (gameMode != GameManager.Instance.gameMode)
                     CmdModeUpdate(GameManager.Instance.gameMode);
 
             if (GameManager.Instance.gameRunning)
                 if (this.score != GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
+                {
                     CmdScoreUpdate(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers);
-
+                }
             // set client unready if start is not pressed
             if (!GameManager.Instance.startPressed && clientReady)
             {
@@ -70,18 +82,7 @@ public class NetworkObject : NetworkBehaviour {
         }
         else
         {
-            if (GameManager.Instance.gameRunning)
-            {
-                if(GameManager.Instance.gameMode == 2)
-                {
-                    if(score != GameManager.Instance.enemyScore)
-                    {
-                        GameManager.Instance.enemyScored = true;
-                        GameManager.Instance.enemyScore = score;
-                    }
-                }
-            }
-            else
+            if (!GameManager.Instance.gameRunning)
             {
                 if (GameManager.Instance.nGameMode != gameMode)
                 {

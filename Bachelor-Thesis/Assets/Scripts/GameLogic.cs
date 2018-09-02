@@ -71,7 +71,7 @@ public class GameLogic : MonoBehaviour {
             return;
 
         // if there is no time limit, end the game when escape is pressed
-        if(timeLimit <= 0 && Input.GetKeyDown(KeyCode.Escape))
+        if(/*timeLimit <= 0 &&*/ Input.GetKeyDown(KeyCode.Escape))
         {
             GameManager.Instance.gameRunning = false;
 
@@ -80,12 +80,13 @@ public class GameLogic : MonoBehaviour {
             GameManager.Instance.participant.wrongAnswers = GameManager.Instance.wrongAnswers;
             GameManager.Instance.participant.skippedTasks = GameManager.Instance.skippedAnswers;
             GameManager.Instance.participant.timePlayed = Time.time - timeStart;
+            GameManager.Instance.CreateUserData("Particpant" + GameManager.Instance.participant.identification);
 
             // Reset GameManager Data
             GameManager.Instance.correctAnswers = 0;
             GameManager.Instance.wrongAnswers = 0;
             GameManager.Instance.skippedAnswers = 0;
-            GameManager.Instance.enemyScore = 0;
+            //GameManager.Instance.enemyScore = 0;
 
             NetworkSync.Load();
         }
@@ -109,7 +110,7 @@ public class GameLogic : MonoBehaviour {
                 GameManager.Instance.correctAnswers = 0;
                 GameManager.Instance.wrongAnswers = 0;
                 GameManager.Instance.skippedAnswers = 0;
-                GameManager.Instance.enemyScore = 0;
+                //GameManager.Instance.enemyScore = 0;
 
                 NetworkSync.Load();
             }
@@ -123,12 +124,8 @@ public class GameLogic : MonoBehaviour {
             {
                 Task();
             }
-
-            if (GameManager.Instance.enemyScored)
-            {
-                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.enemyScore;
-                GameManager.Instance.enemyScored = false;
-            }
+            
+            ScoreUpdate();
 
             // ensures that the inputfield is selected by the event system
             if (!eventSystem.alreadySelecting)
@@ -164,20 +161,26 @@ public class GameLogic : MonoBehaviour {
 
     }
 
+    void ScoreUpdate()
+    {
+        if(GameManager.Instance.gameMode < 2)
+        {
+            score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
+        }
+        else if (GameManager.Instance.gameMode == 2)
+        {
+            if (GameManager.Instance.ownConnectionID == 0)
+                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[1].score;
+            else if (GameManager.Instance.ownConnectionID == 1)
+                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[0].score;
+
+        }
+    }
+
     // Sets a new task up
     void Task()
     {
         transition = true;
-        if (showScore)
-        {
-            if(GameManager.Instance.gameMode == 2)
-            {
-                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.enemyScore;
-            }
-            else
-            score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
-            scoreNotificationAnim.SetTrigger("Up");
-        }
 
         answered = false;
         numberA = Random.Range(intervalMin, intervalMax);
@@ -246,22 +249,33 @@ public class GameLogic : MonoBehaviour {
             {
                 GameManager.Instance.correctAnswers++;
                 scoreNotification.text = "<color=green>+1";
-                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, GameManager.Instance.enemyScore));
+                if(GameManager.Instance.gameMode == 0)
+                    GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, 0));
+                else
+                    GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, GameManager.Instance.playerList[1].score));
             }
             else
             {
                 GameManager.Instance.wrongAnswers++;
                 scoreNotification.text = "<color=red>-1";
-                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, GameManager.Instance.enemyScore));
+                if(GameManager.Instance.gameMode == 0)
+                    GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, 0));
+                else
+                    GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, GameManager.Instance.playerList[1].score));
             }
         }
         else
         {
             GameManager.Instance.skippedAnswers++;
             scoreNotification.text = "+0";
-            GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, GameManager.Instance.enemyScore));
+            if(GameManager.Instance.gameMode == 0)
+                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, 0));
+            else
+                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, GameManager.Instance.playerList[1].score));
         }
-        
+
+        scoreNotificationAnim.SetTrigger("Up");
+
         StartCoroutine(TaskExit());
     }
     IEnumerator TaskExit()

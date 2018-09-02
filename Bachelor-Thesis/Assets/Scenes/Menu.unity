@@ -551,7 +551,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -882.12634}
+  m_AnchoredPosition: {x: 960, y: -882.21747}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &304239316
@@ -692,7 +692,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -247.44662}
+  m_AnchoredPosition: {x: 960, y: -247.45964}
   m_SizeDelta: {x: 800, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &312249294
@@ -1220,6 +1220,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5648bf64029bc7488149c709db01c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fakeEnemyPrefab: {fileID: 1951591565062254, guid: 71609bdcdcfd2b5498c23e610d92ebf2,
+    type: 2}
   canvas: {fileID: 1597024264}
   anim: {fileID: 1451841228}
   clip: {fileID: 7400000, guid: a9116ea9d2ae21f4db5e995ebb01f2bc, type: 2}
@@ -1715,7 +1717,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 959.99994, y: -687.23315}
+  m_AnchoredPosition: {x: 959.99994, y: -687.2982}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &670889196
@@ -4186,7 +4188,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -492.33987}
+  m_AnchoredPosition: {x: 960, y: -492.3789}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1669178382

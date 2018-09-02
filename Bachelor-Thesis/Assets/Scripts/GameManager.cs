@@ -40,8 +40,10 @@ public class GameManager{
 
     public int gameMode = 0;            // 0:= SinglePlayer; 1:= HalbCoop; 2:= Versus
     public int nGameMode = 0;
-    public int enemyScore = 0;
-    public bool enemyScored = false;
+    //public int enemyScore = 0;
+    public int ownConnectionID = 0;
+    public List<NetworkObject> playerList = new List<NetworkObject>();
+    public int playerListLength = 0;
 
     public bool preGameRunning = false;
     public bool gameRunning = false;
