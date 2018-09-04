@@ -42,7 +42,7 @@ public class NetworkSync : NetworkBehaviour {
 
     // Update is called once per frame
     void Update () {        
-        if (GameManager.Instance.playerListLength == 1)
+        if (GameManager.Instance.playerList.Count == 1)
         {
             if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 2)
             {
@@ -53,25 +53,25 @@ public class NetworkSync : NetworkBehaviour {
                 }
             }
         }
-        if (GameManager.Instance.playerListLength < 4)
+        if (GameManager.Instance.playerList.Count < 4)
         {
             if (GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 3)
             {
                 if (!fakeOpponent)
                 {
                     fakeOpponent = true;
-                    StartCoroutine(FakePlayer(4 - GameManager.Instance.playerListLength));
+                    StartCoroutine(FakePlayer(4 - GameManager.Instance.playerList.Count));
                 }
             }
         }
-        if (!GameManager.Instance.gameRunning && GameManager.Instance.playerListLength > networkManager.numPlayers)
+        if (!GameManager.Instance.gameRunning && GameManager.Instance.playerList.Count > networkManager.numPlayers)
         {
-            for (int i = 0; i < GameManager.Instance.playerListLength; i++)
+            for (int i = 0; i < GameManager.Instance.playerList.Count; i++)
             {
-                if (GameManager.Instance.playerList[i] == null /*|| GameManager.Instance.playerList[i].fakePlayer*/)
+                if (GameManager.Instance.playerList[i].Equals(null) /*|| GameManager.Instance.playerList[i].fakePlayer*/)
                 {
                     GameManager.Instance.playerList.RemoveAt(i);
-                    GameManager.Instance.playerListLength--;
+                    //GameManager.Instance.playerListLength--;
                 }
             }
         }
@@ -85,7 +85,7 @@ public class NetworkSync : NetworkBehaviour {
                 {
                     StartCoroutine(StartTransition());
                 }
-                else if( GameManager.Instance.gameMode == 2 && GameManager.Instance.playerListLength >= 2)
+                else if( GameManager.Instance.gameMode == 2 && GameManager.Instance.playerList.Count >= 2)
                 {
                     if (GameManager.Instance.playerList[0].clientReady)
                         if (GameManager.Instance.playerList[1].clientReady)
@@ -146,13 +146,13 @@ public class NetworkSync : NetworkBehaviour {
         endTransition = false;
         canvas.sortingOrder = 2;
         anim.SetTrigger("Start");
-        yield return new WaitForSeconds((clip.length / 2) + 1);
+        yield return new WaitForSeconds((clip.length * 2/ 3));
         //Debug.Log("before scene change");
         //Debug.Break();
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(0);
         //if (isServer)
         //    networkManager.ServerChangeScene("Menu");
-        yield return new WaitForSeconds((clip.length / 2)-1);
+        yield return new WaitForSeconds((clip.length / 3));
         canvas.sortingOrder = -1;
     }
     IEnumerator StartTransition()

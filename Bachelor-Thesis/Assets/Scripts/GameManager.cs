@@ -45,7 +45,7 @@ public class GameManager{
 
     public List<NetworkObject> playerList = new List<NetworkObject>();
     
-    public int playerListLength = 0;
+    //public int playerListLength = 0;
 
     public bool preGameRunning = false;
     public bool gameRunning = false;

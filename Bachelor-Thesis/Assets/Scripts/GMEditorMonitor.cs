@@ -7,7 +7,7 @@ public class GMEditorMonitor : MonoBehaviour {
     [SerializeField]
     List<NetworkObject> playerList = GameManager.Instance.playerList;
     public int ownConnectionID = GameManager.Instance.ownConnectionID;
-    public int playerListLength = GameManager.Instance.playerListLength;
+    public int playerListLength = GameManager.Instance.playerList.Count;
   
     #region Singleton
     public static GMEditorMonitor Instance;
@@ -33,7 +33,7 @@ public class GMEditorMonitor : MonoBehaviour {
         {
             playerList = GameManager.Instance.playerList;
             ownConnectionID = GameManager.Instance.ownConnectionID;
-            playerListLength = GameManager.Instance.playerListLength;
+            playerListLength = GameManager.Instance.playerList.Count;
         }
     }
 }

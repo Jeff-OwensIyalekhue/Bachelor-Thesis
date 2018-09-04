@@ -29,10 +29,10 @@ public class NetworkObject : NetworkBehaviour {
 
         if (fakePlayer)
         {
-            connectionID = GameManager.Instance.playerListLength;
+            connectionID = GameManager.Instance.playerList.Count;
             this.gameObject.name = "FakePlayer " + connectionID;
             GameManager.Instance.playerList.Add(this);
-            GameManager.Instance.playerListLength++;
+            //GameManager.Instance.playerListLength++;
             StartCoroutine(FakePlayerBehavior());
         }
         else
@@ -40,7 +40,7 @@ public class NetworkObject : NetworkBehaviour {
             connectionID += networkManager.numPlayers;
             this.gameObject.name = "NetworkObject " + (networkManager.numPlayers - 1);
             GameManager.Instance.playerList.Add(this);
-            GameManager.Instance.playerListLength++;
+            //GameManager.Instance.playerListLength++;
 
             if (isLocalPlayer)
                 GameManager.Instance.ownConnectionID = (networkManager.numPlayers - 1);

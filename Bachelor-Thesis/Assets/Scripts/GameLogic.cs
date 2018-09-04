@@ -16,6 +16,9 @@ public class GameLogic : MonoBehaviour {
     public TMP_InputField inputField;
     EventSystem eventSystem;
     public TMP_Text score;
+    public TMP_Text scoreBoard;
+    List<int> scoreList = new List<int>();
+    bool positionInScoreboardSet = false;
     public TMP_Text scoreNotification;
     public Animator scoreNotificationAnim;
 
@@ -40,15 +43,15 @@ public class GameLogic : MonoBehaviour {
     int numberB;
     int op;                         // operator: 0 := addition; 1 := subtraction; 2 := multiplication; else := error
     string opClean;
-    [SerializeField]
+
     int expResult;                  // expected result = numberA op numberB
 
     int entResult;                  // entered rusult
 
-    float timeTask;
+    float timeTask;                 // start time of a task
 
     bool answered = true;
-    float timeStart;
+    float timeStart;                // start time of the  game after the start countdown
     #endregion
 
     // Use this for initialization
@@ -164,19 +167,44 @@ public class GameLogic : MonoBehaviour {
 
     void ScoreUpdate()
     {
-        if(GameManager.Instance.gameMode < 2 || GameManager.Instance.gameMode == 3)
+        if(GameManager.Instance.gameMode < 2)
         {
             score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
         }
         else if (GameManager.Instance.gameMode == 2)
         {
-            if (GameManager.Instance.playerListLength < 2)
+            if (GameManager.Instance.playerList.Count < 2)
                 return;
 
             if (GameManager.Instance.ownConnectionID == 0)
                 score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[1].score;
             else if (GameManager.Instance.ownConnectionID == 1)
                 score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[0].score;
+        }
+        else if(GameManager.Instance.gameMode == 3)
+        {
+            score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
+
+            //GameManager.Instance.playerList.Sort();
+            scoreBoard.text = "";
+            scoreList.Clear();
+            foreach (NetworkObject nO in GameManager.Instance.playerList)
+            {
+                scoreList.Add(nO.score);
+            }
+            scoreList.Sort();
+            scoreBoard.text = "Scores:\n";
+            for (int i = scoreList.Count - 1; i >= 0; i--)
+            {
+                if(!positionInScoreboardSet && scoreList[i] == (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers))
+                {
+                    positionInScoreboardSet = true;
+                    scoreBoard.text += "you\n";
+                }
+                else
+                    scoreBoard.text += scoreList[i] + "\n";
+            }
+            positionInScoreboardSet = false;
         }
     }
 
@@ -252,7 +280,7 @@ public class GameLogic : MonoBehaviour {
             {
                 GameManager.Instance.correctAnswers++;
                 scoreNotification.text = "<color=green>+1";
-                if(GameManager.Instance.playerListLength == 1)
+                if(GameManager.Instance.playerList.Count == 1)
                     GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, 0));
                 else
                     GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, GameManager.Instance.playerList[1].score));
@@ -261,7 +289,7 @@ public class GameLogic : MonoBehaviour {
             {
                 GameManager.Instance.wrongAnswers++;
                 scoreNotification.text = "<color=red>-1";
-                if(GameManager.Instance.playerListLength == 1)
+                if(GameManager.Instance.playerList.Count == 1)
                     GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, 0));
                 else
                     GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, GameManager.Instance.playerList[1].score));
@@ -271,7 +299,7 @@ public class GameLogic : MonoBehaviour {
         {
             GameManager.Instance.skippedAnswers++;
             scoreNotification.text = "+0";
-            if(GameManager.Instance.playerListLength == 1)
+            if(GameManager.Instance.playerList.Count == 1)
                 GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, 0));
             else
                 GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, GameManager.Instance.playerList[1].score));
