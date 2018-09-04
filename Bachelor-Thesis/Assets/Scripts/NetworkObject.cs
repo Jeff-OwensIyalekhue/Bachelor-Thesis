@@ -98,7 +98,7 @@ public class NetworkObject : NetworkBehaviour {
         }
         else
         {
-            if (!GameManager.Instance.gameRunning)
+            if (!GameManager.Instance.gameRunning && !GameManager.Instance.isHost)
             {
                 if (GameManager.Instance.nGameMode != gameMode)
                 {

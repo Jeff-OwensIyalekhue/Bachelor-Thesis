@@ -58,9 +58,10 @@ public class NetworkMenu : MonoBehaviour {
         //canvas.sortingOrder = -2;
     }
 
-    public void SetPort(int port)
+    public void SetPort(string port)
     {
-        networkManager.networkPort = port;
+        if(port.Length > 0 && port.Length < 6)
+            networkManager.networkPort = int.Parse(port);
     }
 
     public void SetNetworkAddress(string ip)

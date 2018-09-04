@@ -6,8 +6,10 @@ using TMPro;
 
 public class MenuScript : MonoBehaviour {
 
-    public TMP_Text text;
+    public TMP_Text startButtonText;
     public TMP_Dropdown dropdown;
+
+    public TMP_Text savePathInputfieldPlaceholder;
 
     NetworkManager networkManager;
 
@@ -20,20 +22,32 @@ public class MenuScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (savePathInputfieldPlaceholder.text != GameManager.Instance.pathToSaveLocation)
+            savePathInputfieldPlaceholder.text = GameManager.Instance.pathToSaveLocation;
+
         if (dropdown.value != GameManager.Instance.gameMode)
             dropdown.value = GameManager.Instance.gameMode;
+        if (!GameManager.Instance.isHost && dropdown.interactable)
+            dropdown.interactable = false;
+        if (GameManager.Instance.isHost && !dropdown.interactable)
+            dropdown.interactable = true;
+    }
+
+    public void SetSavePath(string path)
+    {
+        GameManager.Instance.pathToSaveLocation = path;
     }
 
     public void SetReady()
     {
         if (GameManager.Instance.startPressed)
         {
-            text.text = "Start";
+            startButtonText.text = "Start";
             GameManager.Instance.startPressed = false;
             return;
         }
         if(GameManager.Instance.gameMode != 0)
-            text.text = "wait for others";
+            startButtonText.text = "wait for others";
         GameManager.Instance.startPressed = true;
     }
     

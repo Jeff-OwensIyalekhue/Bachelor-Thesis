@@ -6,8 +6,7 @@ public class GMEditorMonitor : MonoBehaviour {
 
     [SerializeField]
     List<NetworkObject> playerList = GameManager.Instance.playerList;
-    public int ownConnectionID = GameManager.Instance.ownConnectionID;
-    public int playerListLength = GameManager.Instance.playerList.Count;
+    public string path = GameManager.Instance.pathToSaveLocation;
   
     #region Singleton
     public static GMEditorMonitor Instance;
@@ -32,8 +31,7 @@ public class GMEditorMonitor : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.U))
         {
             playerList = GameManager.Instance.playerList;
-            ownConnectionID = GameManager.Instance.ownConnectionID;
-            playerListLength = GameManager.Instance.playerList.Count;
+            path= GameManager.Instance.pathToSaveLocation;
         }
     }
 }
