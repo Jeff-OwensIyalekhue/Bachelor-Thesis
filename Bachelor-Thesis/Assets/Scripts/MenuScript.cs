@@ -19,8 +19,6 @@ public class MenuScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.U))
-            Debug.Log(GameManager.Instance.ownConnectionID);
 
         if (dropdown.value != GameManager.Instance.gameMode)
             dropdown.value = GameManager.Instance.gameMode;

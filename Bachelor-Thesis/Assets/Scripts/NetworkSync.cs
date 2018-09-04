@@ -29,6 +29,7 @@ public class NetworkSync : NetworkBehaviour {
     bool fakeOpponent = false;
     public GameObject fakeEnemyPrefab;
 
+    [Header("Scene Blackscreen Fade")]
     public Canvas canvas;
     public Animator anim;
     public AnimationClip clip;
@@ -37,28 +38,37 @@ public class NetworkSync : NetworkBehaviour {
     void Start () {
         DontDestroyOnLoad(this);
         networkManager = FindObjectOfType<NetworkManager>();
-	}
+    }
 
     // Update is called once per frame
-    void Update () {
-
-        if(GameManager.Instance.playerListLength == 1)
+    void Update () {        
+        if (GameManager.Instance.playerListLength == 1)
         {
             if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 2)
             {
                 if (!fakeOpponent)
                 {
                     fakeOpponent = true;
-                    StartCoroutine(FakePlayer());
+                    StartCoroutine(FakePlayer(1));
                 }
             }
         }
-
-        if(GameManager.Instance.playerListLength > networkManager.numPlayers)
+        if (GameManager.Instance.playerListLength < 4)
         {
-            for(int i = 0; i < GameManager.Instance.playerListLength; i++)
+            if (GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 3)
             {
-                if(GameManager.Instance.playerList[i] == null)
+                if (!fakeOpponent)
+                {
+                    fakeOpponent = true;
+                    StartCoroutine(FakePlayer(4 - GameManager.Instance.playerListLength));
+                }
+            }
+        }
+        if (!GameManager.Instance.gameRunning && GameManager.Instance.playerListLength > networkManager.numPlayers)
+        {
+            for (int i = 0; i < GameManager.Instance.playerListLength; i++)
+            {
+                if (GameManager.Instance.playerList[i] == null /*|| GameManager.Instance.playerList[i].fakePlayer*/)
                 {
                     GameManager.Instance.playerList.RemoveAt(i);
                     GameManager.Instance.playerListLength--;
@@ -71,13 +81,25 @@ public class NetworkSync : NetworkBehaviour {
         {
             if (GameManager.Instance.gmClientReady)
             {
-                //Debug.Log("Looking if everybody is ready.");
-                foreach (NetworkObject nO in GameManager.Instance.playerList)
+                if(GameManager.Instance.gameMode == 0)
                 {
-                    if (!nO.clientReady)
-                        return;
+                    StartCoroutine(StartTransition());
                 }
-                StartCoroutine(StartTransition());
+                else if( GameManager.Instance.gameMode == 2 && GameManager.Instance.playerListLength >= 2)
+                {
+                    if (GameManager.Instance.playerList[0].clientReady)
+                        if (GameManager.Instance.playerList[1].clientReady)
+                            StartCoroutine(StartTransition());
+                }
+                else
+                {
+                    foreach (NetworkObject nO in GameManager.Instance.playerList)
+                    {
+                        if (!nO.clientReady)
+                            return;
+                    }
+                    StartCoroutine(StartTransition());
+                }
             }
         }
 
@@ -85,47 +107,31 @@ public class NetworkSync : NetworkBehaviour {
             StartCoroutine(EndTransition());
     }
 
-    IEnumerator FakePlayer()
+    IEnumerator FakePlayer(int i)
     {
+        // add i  time create fplayer
         Debug.Log("Fake opponent");
-        GameObject dummy = Instantiate(fakeEnemyPrefab);
-        dummy.name = "fakeOpponent";
-        NetworkObject nO = fakeEnemyPrefab.GetComponent<NetworkObject>();
-        GameManager.Instance.playerList.Add(nO);
-        GameManager.Instance.playerListLength++;
-
-        float r = 0;
-        while (GameManager.Instance.gameRunning)
+        GameObject[] dummy = new GameObject[i];
+        //NetworkObject[] nO = new NetworkObject[i];
+        for(int j = 0; j  < i; j++)
         {
-            yield return new WaitForSeconds(6);
-            r = Random.Range(0f, 1f);
-            if (GameManager.Instance.playerList[1].score < GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
-            {
-                if (r <= 0.7)
-                {
-                    GameManager.Instance.playerList[1].score++;
-                }
-                else if (r > 0.95)
-                {
-                    GameManager.Instance.playerList[1].score--;
-                }
-            }
-            else
-            {
-                if (r <= 0.5)
-                {
-                    GameManager.Instance.playerList[1].score++;
-                }
-                else if (r > 0.9)
-                {
-                    GameManager.Instance.playerList[1].score--;
-                }
-            }
+            dummy[j] = Instantiate(fakeEnemyPrefab);
+            //nO[j] = fakeEnemyPrefab.GetComponent<NetworkObject>();
+            //nO[j].connectionID = GameManager.Instance.playerListLength - 1;
+            //GameManager.Instance.playerList.Add(nO[j]);
+            //GameManager.Instance.playerListLength++;
         }
-        
-        GameManager.Instance.playerList.Remove(nO);
-        GameManager.Instance.playerListLength--;
-        Destroy(dummy);
+
+        yield return new WaitWhile(() => GameManager.Instance.gameRunning);
+
+        for (int j = 0; j < i; j++)
+        {
+            //    GameManager.Instance.playerList[GameManager.Instance.playerListLength - 1 - j].score = 0;
+            //    GameManager.Instance.playerList.RemoveAt(GameManager.Instance.playerListLength - 1 - j);
+            //    GameManager.Instance.playerListLength--;
+            Destroy(dummy[i - 1 - j]);
+        }
+
         fakeOpponent = false;
     }
 
@@ -135,11 +141,15 @@ public class NetworkSync : NetworkBehaviour {
     }
     IEnumerator EndTransition()
     {
+        //Debug.Log("begin transition");
+        //Debug.Break();
         endTransition = false;
         canvas.sortingOrder = 2;
         anim.SetTrigger("Start");
         yield return new WaitForSeconds((clip.length / 2) + 1);
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        //Debug.Log("before scene change");
+        //Debug.Break();
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(0);
         //if (isServer)
         //    networkManager.ServerChangeScene("Menu");
         yield return new WaitForSeconds((clip.length / 2)-1);
@@ -150,10 +160,11 @@ public class NetworkSync : NetworkBehaviour {
         startTransition = true;
         canvas.sortingOrder = 2;
         anim.SetTrigger("Start");
-        yield return new WaitForSeconds(clip.length / 2);
+        yield return new WaitForSeconds((clip.length / 2) + 1);
         GameManager.Instance.everybodyReady = true;
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(1);
         GameManager.Instance.preGameRunning = true;
-        yield return new WaitForSeconds(clip.length / 2);
+        yield return new WaitForSeconds((clip.length / 2) - 1);
         canvas.sortingOrder = -1;
         startTransition = false;
     }

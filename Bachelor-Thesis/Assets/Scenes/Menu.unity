@@ -113,6 +113,47 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &11319975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 11319977}
+  - component: {fileID: 11319976}
+  m_Layer: 0
+  m_Name: GameManger Monitor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!114 &11319976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 11319975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13e2c119b159c6743872d9771e248334, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerList: []
+--- !u!4 &11319977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 11319975}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 411, y: 68.500015, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &50823024
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,7 +1241,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 380261091}
-  - component: {fileID: 380261090}
   - component: {fileID: 380261089}
   m_Layer: 0
   m_Name: NetworkSync
@@ -1220,43 +1260,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5648bf64029bc7488149c709db01c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fakeEnemyPrefab: {fileID: 1951591565062254, guid: 71609bdcdcfd2b5498c23e610d92ebf2,
+  fakeEnemyPrefab: {fileID: 1185904889421722, guid: 7f223179dc879774c82e5d2577f91df2,
     type: 2}
   canvas: {fileID: 1597024264}
   anim: {fileID: 1451841228}
   clip: {fileID: 7400000, guid: a9116ea9d2ae21f4db5e995ebb01f2bc, type: 2}
---- !u!114 &380261090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 380261088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!4 &380261091
 Transform:
   m_ObjectHideFlags: 0

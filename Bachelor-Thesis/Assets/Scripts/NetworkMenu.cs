@@ -12,7 +12,6 @@ public class NetworkMenu : MonoBehaviour {
     public GameObject inputPanel;
     public Canvas canvas;
 
-    bool isHost = false;
 
     // Use this for initialization
     void Start () {
@@ -25,20 +24,27 @@ public class NetworkMenu : MonoBehaviour {
         else
             networkInfo.text = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName())[1] + "\n" + networkManager.networkPort;
 
-        if(isHost)
+        if(GameManager.Instance.isHost)
             networkInfo.text += " (H)";
     }
 
     // Update is called once per frame
     void Update () {
-
+        //if (GameManager.Instance.nGameMode == 0 && GameManager.Instance.isConnected)
+        //{
+        //    if (!GameManager.Instance.isHost)
+        //    {
+        //        Debug.Log("Session is on Singleplayer");
+        //        Disconnect();
+        //    }
+        //}
     }
 
     public void PlayAsHost()
     {
         networkManager.StartHost();
         networkInfo.text += " (H)";
-        isHost = true;
+        GameManager.Instance.isHost = true;
         GameManager.Instance.isConnected = true;
         inputPanel.SetActive(false);
         //canvas.sortingOrder = -2;
@@ -72,10 +78,10 @@ public class NetworkMenu : MonoBehaviour {
         if (!GameManager.Instance.isConnected)
             return;
         GameManager.Instance.isConnected = false;
-
-        if (isHost)
+        GameManager.Instance.nGameMode = -1;
+        if (GameManager.Instance.isHost)
         {
-            isHost = false;
+            GameManager.Instance.isHost = false;
             networkManager.StopHost();
         }
         else

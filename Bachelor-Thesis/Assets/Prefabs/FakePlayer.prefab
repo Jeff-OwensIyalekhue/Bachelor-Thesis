@@ -9,44 +9,59 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1951591565062254}
+  m_RootGameObject: {fileID: 1185904889421722}
   m_IsPrefabAsset: 1
---- !u!1 &1951591565062254
+--- !u!1 &1185904889421722
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4481000639707244}
-  - component: {fileID: 114004744429438834}
-  - component: {fileID: 114503570300297222}
+  - component: {fileID: 4938739982048588}
+  - component: {fileID: 114489945412931024}
+  - component: {fileID: 114044880491291442}
   m_Layer: 0
-  m_Name: NetworkObject
+  m_Name: FakePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4481000639707244
+--- !u!4 &4938739982048588
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1951591565062254}
+  m_GameObject: {fileID: 1185904889421722}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 411, y: 68.500015, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114004744429438834
+--- !u!114 &114044880491291442
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1951591565062254}
+  m_GameObject: {fileID: 1185904889421722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d99e33716ac09cb459667daeff668e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fakePlayer: 1
+  score: 0
+  connectionID: 0
+  clientReady: 0
+--- !u!114 &114489945412931024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1185904889421722}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
@@ -55,36 +70,21 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 113
-    i1: 96
-    i2: 155
-    i3: 220
+    i0: 127
+    i1: 34
+    i2: 49
+    i3: 121
     i4: 220
-    i5: 253
-    i6: 43
-    i7: 84
-    i8: 152
-    i9: 194
-    i10: 62
-    i11: 97
-    i12: 13
-    i13: 146
-    i14: 235
+    i5: 135
+    i6: 151
+    i7: 116
+    i8: 200
+    i9: 46
+    i10: 93
+    i11: 37
+    i12: 119
+    i13: 249
+    i14: 29
     i15: 242
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &114503570300297222
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1951591565062254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d99e33716ac09cb459667daeff668e20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fakePlayer: 0
-  score: 0
-  connectionID: -1
-  clientReady: 0

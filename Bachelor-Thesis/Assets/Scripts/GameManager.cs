@@ -32,43 +32,36 @@ public class GameManager{
     }
     #endregion
 
+    public string pathToSaveLocation = "I:/";
+    public ParticipantData participant;
+
     public int correctAnswers = 0;
     public int wrongAnswers = 0;
     public int skippedAnswers = 0;
 
-    public ParticipantData participant;
-
     public int gameMode = 0;            // 0:= SinglePlayer; 1:= HalbCoop; 2:= Versus
-    public int nGameMode = 0;
-    //public int enemyScore = 0;
+    public int nGameMode = -1;
     public int ownConnectionID = 0;
+
     public List<NetworkObject> playerList = new List<NetworkObject>();
+    
     public int playerListLength = 0;
 
     public bool preGameRunning = false;
     public bool gameRunning = false;
     
     public bool isConnected = false;
+    public bool isHost = false;
 
     public bool startPressed = false;
     public bool gmClientReady = false;
     public bool everybodyReady = false;
     public int amountPlayerReady = 0;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
-
+    
     public void CreateUserData(string s)
     {
 
-        string pathFolder = "I:/"+s;
+        string pathFolder = pathToSaveLocation + s;
 
         try
         {
@@ -136,7 +129,7 @@ public class GameManager{
                 file.WriteLine(i + ". Task **************************");
                 i++;
                 file.WriteLine(task.task);
-                file.WriteLine("time needed: " + task.timeNeeded);
+                file.WriteLine("time needed in seconds: " + task.timeNeeded.ToString("N2"));
                 file.WriteLine("solved: " + task.solved);
                 file.WriteLine("correct answer: " + task.correctAnswer);
                 file.WriteLine("Enemy score at this point: " + task.enemyScore);

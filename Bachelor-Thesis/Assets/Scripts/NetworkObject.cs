@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 
 public class NetworkObject : NetworkBehaviour {
 
+    public bool fakePlayer = false;
+
     [SyncVar]
     public int score = 0;
 
@@ -25,17 +27,31 @@ public class NetworkObject : NetworkBehaviour {
 
         networkManager = FindObjectOfType<NetworkManager>();
 
-        connectionID += networkManager.numPlayers;
-        this.gameObject.name = "NetworkObject " + (networkManager.numPlayers - 1);
-        GameManager.Instance.playerList.Add(this);
-        GameManager.Instance.playerListLength++;
+        if (fakePlayer)
+        {
+            connectionID = GameManager.Instance.playerListLength;
+            this.gameObject.name = "FakePlayer " + connectionID;
+            GameManager.Instance.playerList.Add(this);
+            GameManager.Instance.playerListLength++;
+            StartCoroutine(FakePlayerBehavior());
+        }
+        else
+        {
+            connectionID += networkManager.numPlayers;
+            this.gameObject.name = "NetworkObject " + (networkManager.numPlayers - 1);
+            GameManager.Instance.playerList.Add(this);
+            GameManager.Instance.playerListLength++;
 
-        if(isLocalPlayer)
-            GameManager.Instance.ownConnectionID = (networkManager.numPlayers - 1);
+            if (isLocalPlayer)
+                GameManager.Instance.ownConnectionID = (networkManager.numPlayers - 1);
+        }
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if(!GameManager.Instance.playerList.Contains(this))
+            GameManager.Instance.playerList.Add(this);
 
         if (isLocalPlayer)
         {
@@ -75,8 +91,8 @@ public class NetworkObject : NetworkBehaviour {
                 GameManager.Instance.everybodyReady = false;
                 GameManager.Instance.gmClientReady = false;
                 GameManager.Instance.startPressed = false;
-                if (isServer)
-                    networkManager.ServerChangeScene("Game");
+                //if (isServer)
+                //    networkManager.ServerChangeScene("Game");
 
             }
         }
@@ -90,6 +106,40 @@ public class NetworkObject : NetworkBehaviour {
                 }
             }
         }
+    }
+
+    IEnumerator FakePlayerBehavior()
+    {
+        float r = 0;
+        while (GameManager.Instance.gameRunning)
+        {
+            yield return new WaitForSeconds(6);
+
+            r = Random.Range(0f, 1f);
+            if (score < GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
+            {
+                if (r <= 0.7)
+                {
+                    score++;
+                }
+                else if (r > 0.95)
+                {
+                    score--;
+                }
+            }
+            else
+            {
+                if (r <= 0.5)
+                {
+                    score++;
+                }
+                else if (r > 0.9)
+                {
+                    score--;
+                }
+            }
+        }
+        score = 0;
     }
 
     [Command]
