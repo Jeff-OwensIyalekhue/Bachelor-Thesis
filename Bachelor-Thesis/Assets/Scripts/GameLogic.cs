@@ -33,7 +33,6 @@ public class GameLogic : MonoBehaviour {
     public int intervalMax = 10;    // exclusive
     [SerializeField]
     float timeLimit = 0;            // if value <= 0: no time limit
-    public bool showTimer = true;
     public bool showScore = true;
 
     [Header("")]
@@ -120,7 +119,7 @@ public class GameLogic : MonoBehaviour {
             }
 
             // display the remaining time if a time limit is set
-            if (timeLimit > 0 && showTimer && (timeLimit + timeStart - Time.time) >= 0)
+            if (timeLimit > 0 && GameManager.Instance.showTimer && (timeLimit + timeStart - Time.time) >= 0)
                 timer.text = (timeLimit + timeStart - Time.time).ToString("N0");
 
         // checks if new task should be asked
@@ -154,7 +153,7 @@ public class GameLogic : MonoBehaviour {
             timer.text = "no time limit";
 
 
-        if (!showTimer)
+        if (!GameManager.Instance.showTimer)
             timer.gameObject.SetActive(false);
         timeStart = Time.time;
 

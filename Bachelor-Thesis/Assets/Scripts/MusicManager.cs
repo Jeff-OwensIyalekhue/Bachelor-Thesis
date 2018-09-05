@@ -77,7 +77,7 @@ public class MusicManager : MonoBehaviour
     public void SetMusicLevel(float musicLvl)
     {
         mainMixer.SetFloat("musicVol", musicLvl);
-        //GameData.Instance.musicVolume = musicLvl;
+        GameManager.Instance.musicVolume = musicLvl;
     }
 
     // Call this function and pass in the float parameter sfxLevel to set the volume of the AudioMixerGroup SoundFx in mainMixer

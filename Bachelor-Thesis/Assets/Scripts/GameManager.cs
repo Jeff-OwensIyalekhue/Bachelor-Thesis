@@ -32,7 +32,10 @@ public class GameManager{
     }
     #endregion
 
+    public bool showTimer = true;
     public string pathToSaveLocation = "I:/";
+    public float musicVolume = -80;
+
     public ParticipantData participant;
 
     public int correctAnswers = 0;
@@ -56,7 +59,6 @@ public class GameManager{
     public bool startPressed = false;
     public bool gmClientReady = false;
     public bool everybodyReady = false;
-    public int amountPlayerReady = 0;
     
     public void CreateUserData(string s)
     {
@@ -149,9 +151,30 @@ public class GameManager{
 
     }
 
-    public void LoadData()
+    public void SaveOptions()
     {
+        BinaryFormatter bF = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath +"/options.dat");
 
+        OptionsData data = new OptionsData(showTimer, pathToSaveLocation, musicVolume);
+        
+        bF.Serialize(file, data);
+        file.Close();
+    }
+
+    public void LoadOptions()
+    {
+        if (File.Exists(Application.persistentDataPath + "/options.dat"))
+        {
+            BinaryFormatter bF = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/options.dat", FileMode.Open);
+            OptionsData data = (OptionsData)bF.Deserialize(file);
+            file.Close();
+
+            showTimer = data.showTimer;
+            pathToSaveLocation = data.pathToSaveLocation;
+            musicVolume = data.musicVolume;
+        }
     }
 
     // End the game / return to the desktop
@@ -211,3 +234,19 @@ public class TaskData
         enemyScore = e;
     }
 }
+
+[Serializable]
+public class OptionsData
+{
+    public bool showTimer;
+    public string pathToSaveLocation;
+    public float musicVolume;
+
+    public OptionsData(bool t, string p, float m)
+    {
+        showTimer = t;
+        pathToSaveLocation = p;
+        musicVolume = m;
+    }
+}
+
