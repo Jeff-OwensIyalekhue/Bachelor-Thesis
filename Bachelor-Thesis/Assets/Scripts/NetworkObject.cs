@@ -17,6 +17,10 @@ public class NetworkObject : NetworkBehaviour {
     [SyncVar]
     public bool clientReady = false;
 
+    [SerializeField]
+    [SyncVar]
+    float timeLimit;
+
     [SyncVar]
     int gameMode = 0;
     
@@ -26,6 +30,8 @@ public class NetworkObject : NetworkBehaviour {
         DontDestroyOnLoad(this);
 
         networkManager = FindObjectOfType<NetworkManager>();
+
+        timeLimit = GameManager.Instance.timeLimit;
 
         if (fakePlayer)
         {
@@ -55,8 +61,20 @@ public class NetworkObject : NetworkBehaviour {
         if(!GameManager.Instance.playerList.Contains(this))
             GameManager.Instance.playerList.Add(this);
 
+        if (GameManager.Instance.isHost)
+        {
+            if (timeLimit != GameManager.Instance.timeLimit)
+                timeLimit = GameManager.Instance.timeLimit;
+        }
+        else
+        {
+            if (timeLimit != GameManager.Instance.timeLimit)
+                GameManager.Instance.timeLimit = timeLimit;
+        }
+
         if (isLocalPlayer)
         {
+
             if(connectionID != GameManager.Instance.ownConnectionID)
             {
                 GameManager.Instance.ownConnectionID = connectionID;

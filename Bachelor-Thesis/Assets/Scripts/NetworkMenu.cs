@@ -62,6 +62,14 @@ public class NetworkMenu : MonoBehaviour {
     {
         if(port.Length > 0 && port.Length < 6)
             networkManager.networkPort = int.Parse(port);
+
+        if (networkManager.networkAddress != "localhost")
+            networkInfo.text = networkManager.networkAddress + "\n" + networkManager.networkPort;
+        else
+            networkInfo.text = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName())[1] + "\n" + networkManager.networkPort;
+
+        if (GameManager.Instance.isHost)
+            networkInfo.text += " (H)";
     }
 
     public void SetNetworkAddress(string ip)
@@ -72,6 +80,10 @@ public class NetworkMenu : MonoBehaviour {
             networkInfo.text = networkManager.networkAddress + "\n" + networkManager.networkPort;
         else
             networkInfo.text = System.Net.Dns.GetHostAddresses(System.Net.Dns.GetHostName())[1] + "\n" + networkManager.networkPort;
+
+
+        if (GameManager.Instance.isHost)
+            networkInfo.text += " (H)";
     }
 
     public void Disconnect()
