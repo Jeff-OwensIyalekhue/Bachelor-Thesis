@@ -33,6 +33,7 @@ public class GameManager{
     #endregion
 
     public bool showTimer = true;
+    public float timeLimit = 0;            // if value <= 0: no time limit
     public string pathToSaveLocation = "I:/";
     public float musicVolume = -80;
 
@@ -60,22 +61,23 @@ public class GameManager{
     public bool gmClientReady = false;
     public bool everybodyReady = false;
     
-    public void CreateUserData(string s)
+    public void CreateUserData()
     {
 
-        string pathFolder = pathToSaveLocation + s;
+        string pathFolder = pathToSaveLocation + "Particpant" + participant.identification;
 
         try
         {
             // Determine whether the directory exists.
-            if (Directory.Exists(pathFolder))
+            while (Directory.Exists(pathFolder))
             {
-                Debug.Log("That path exists already.");
-                return;
+                participant.identification++;
+                pathFolder = pathToSaveLocation + "Particpant" + participant.identification; ;
+                //return;
             }
 
             // Try to create the directory.
-            DirectoryInfo di = Directory.CreateDirectory(pathFolder);
+            Directory.CreateDirectory(pathFolder);
             Debug.Log("The directory was created successfully at " + Directory.GetCreationTime(pathFolder));
 
             // Delete the directory.
@@ -90,11 +92,14 @@ public class GameManager{
 
         // Creating a human readable .txt file of particpant data
         //Debug.Log("create user data");
-        string path = pathFolder + "/" + s + "_HR.txt";
+        string path = pathFolder + "/Particpant" + participant.identification + "_HR.txt";
         
         using(StreamWriter file = new StreamWriter(path, true))
         {
+            file.WriteLine(DateTime.Today.ToString("D") + ", " + DateTime.Now.ToString("h:mm tt"));
+
             file.WriteLine("Particpant " + participant.identification);
+            file.WriteLine("Player " + participant.connectionID);
 
             switch (participant.gameMode)
             {
@@ -122,7 +127,7 @@ public class GameManager{
             file.WriteLine("        Solved: " + (participant.correctAnswers + participant.wrongAnswers).ToString());
             file.WriteLine("            Correct Solutions: " + (participant.correctAnswers).ToString());
             file.WriteLine("            Wrong Solutions: " + (participant.wrongAnswers).ToString());
-            file.WriteLine("    Skipped: " + participant.skippedTasks);
+            file.WriteLine("        Skipped: " + participant.skippedTasks);
 
             file.WriteLine("TaskData:");
             int i = 1;
@@ -134,7 +139,11 @@ public class GameManager{
                 file.WriteLine("time needed in seconds: " + task.timeNeeded.ToString("N2"));
                 file.WriteLine("solved: " + task.solved);
                 file.WriteLine("correct answer: " + task.correctAnswer);
-                file.WriteLine("Enemy score at this point: " + task.enemyScore);
+                file.WriteLine("Enemy score at this point: ");
+                for(int j = 0; j < task.enemyIDs.Count; j++)
+                {
+                    file.WriteLine("    Player " + task.enemyIDs[j] + " : " + task.enemyScore[j]);
+                }
                 file.WriteLine("**********************************");
             }
 
@@ -142,7 +151,7 @@ public class GameManager{
 
         // Creating a serialized file of particpant data
         BinaryFormatter bF = new BinaryFormatter();
-        FileStream fileB = File.Create(pathFolder + "/" + s + "_NHR.dat");
+        FileStream fileB = File.Create(pathFolder + "/Particpant" + participant.identification + "_NHR.dat");
 
         ParticipantData data = participant;
 
@@ -156,7 +165,7 @@ public class GameManager{
         BinaryFormatter bF = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath +"/options.dat");
 
-        OptionsData data = new OptionsData(showTimer, pathToSaveLocation, musicVolume);
+        OptionsData data = new OptionsData(showTimer, timeLimit, pathToSaveLocation, musicVolume);
         
         bF.Serialize(file, data);
         file.Close();
@@ -172,6 +181,7 @@ public class GameManager{
             file.Close();
 
             showTimer = data.showTimer;
+            timeLimit = data.timeLimit;
             pathToSaveLocation = data.pathToSaveLocation;
             musicVolume = data.musicVolume;
         }
@@ -198,6 +208,7 @@ public class GameManager{
 public class ParticipantData
 {
     public int identification;
+    public int connectionID;
     public int gameMode;
     public float timePlayed;
     public int skippedTasks;
@@ -208,6 +219,7 @@ public class ParticipantData
     public ParticipantData(int id, int gM)
     {
         identification = id;
+        connectionID = GameManager.Instance.ownConnectionID;
         gameMode = gM;
         timePlayed = 0;
         skippedTasks = 0;
@@ -223,15 +235,17 @@ public class TaskData
     public string task;
     public bool solved;
     public bool correctAnswer;
-    public int enemyScore;
+    public List<int> enemyIDs;
+    public List<int> enemyScore;
 
-    public TaskData(float t, string ta, bool s, bool c, int e)
+    public TaskData(float t, string ta, bool s, bool c, List<int> eID,List<int> eS)
     {
         timeNeeded = t;
         task = ta;
         solved = s;
         correctAnswer = c;
-        enemyScore = e;
+        enemyIDs = eID;
+        enemyScore = eS;
     }
 }
 
@@ -239,12 +253,14 @@ public class TaskData
 public class OptionsData
 {
     public bool showTimer;
+    public float timeLimit;
     public string pathToSaveLocation;
     public float musicVolume;
 
-    public OptionsData(bool t, string p, float m)
+    public OptionsData(bool sT, float t, string p, float m)
     {
-        showTimer = t;
+        showTimer = sT;
+        timeLimit = t;
         pathToSaveLocation = p;
         musicVolume = m;
     }

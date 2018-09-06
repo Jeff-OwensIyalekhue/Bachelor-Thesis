@@ -12,7 +12,10 @@ public class MenuScript : MonoBehaviour {
     public TMP_Dropdown dropdown;
 
     public TMP_InputField savePathInputField;
-    public TMP_Text savePathInputfieldPlaceholderText;
+    public TMP_Text savePathInputFieldPlaceholderText;
+
+    public TMP_InputField timeLimitInputField;
+    public TMP_Text timeLimitInputFieldPlaceholderText;
 
     public TMP_Text showTimerButtonText;
     public Slider musicVolBar;
@@ -39,8 +42,12 @@ public class MenuScript : MonoBehaviour {
         if (!GameManager.Instance.showTimer && showTimerButtonText.text != "<s>display time")
             showTimerButtonText.text = "<s>display time";
 
-        if (savePathInputfieldPlaceholderText.text != GameManager.Instance.pathToSaveLocation && savePathInputfieldPlaceholderText.text != "error")
-            savePathInputfieldPlaceholderText.text = GameManager.Instance.pathToSaveLocation;
+        if (savePathInputFieldPlaceholderText.text != GameManager.Instance.pathToSaveLocation && savePathInputFieldPlaceholderText.text != "error")
+            savePathInputFieldPlaceholderText.text = GameManager.Instance.pathToSaveLocation;
+
+
+        if (timeLimitInputFieldPlaceholderText.text != GameManager.Instance.timeLimit.ToString() && timeLimitInputFieldPlaceholderText.text != "error")
+            timeLimitInputFieldPlaceholderText.text = GameManager.Instance.timeLimit.ToString();
 
         if (dropdown.value != GameManager.Instance.gameMode)
             dropdown.value = GameManager.Instance.gameMode;
@@ -57,15 +64,21 @@ public class MenuScript : MonoBehaviour {
         if (Directory.Exists(path))
         {
             GameManager.Instance.pathToSaveLocation = path;
-            savePathInputfieldPlaceholderText.text = GameManager.Instance.pathToSaveLocation;
+            savePathInputFieldPlaceholderText.text = GameManager.Instance.pathToSaveLocation;
         }
         else
-            savePathInputfieldPlaceholderText.text = "error";
+            savePathInputFieldPlaceholderText.text = "error";
     }
 
     public void ShowTimer()
     {
         GameManager.Instance.showTimer = !GameManager.Instance.showTimer;
+    }
+
+    public void SetTimeLimit(string s)
+    {
+        GameManager.Instance.timeLimit = float.Parse(s);
+        timeLimitInputFieldPlaceholderText.text = GameManager.Instance.timeLimit.ToString();
     }
 
     public void SetMusicLevel(float musicLvl)
