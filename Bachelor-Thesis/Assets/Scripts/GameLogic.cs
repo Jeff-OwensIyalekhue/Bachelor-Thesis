@@ -280,13 +280,13 @@ public class GameLogic : MonoBehaviour {
                 eScores.Add(nO.score);
             }
         }
-        if (GameManager.Instance.gameMode == 0)
-        {
-            eScores.Clear();
-            eScores.Add(0);
-            eIDs.Clear();
-            eIDs.Add(0);
-        }
+        //if (GameManager.Instance.gameMode == 0)
+        //{
+        //    eScores.Clear();
+        //    eScores.Add(0);
+        //    eIDs.Clear();
+        //    eIDs.Add(0);
+        //}
 
 
         if (inputField.text.Length != 0)   
