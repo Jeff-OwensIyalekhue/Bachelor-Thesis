@@ -45,7 +45,7 @@ public class GameLogic : MonoBehaviour {
 
     int entResult;                  // entered rusult
 
-    float timeTask;                 // start time of a task
+    float startTime, timeTask;                 // start time of a task
 
     bool answered = true;
     float timeStart;                // start time of the  game after the start countdown
@@ -54,7 +54,7 @@ public class GameLogic : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         int r = Random.Range(0, 100);
-        GameManager.Instance.participant = new ParticipantData(r, GameManager.Instance.gameMode);
+        GameManager.Instance.participant = new ParticipantData(r, GameManager.Instance.gameMode, System.DateTime.Now);
         eventSystem = FindObjectOfType<EventSystem>();
     }
 	
@@ -159,6 +159,7 @@ public class GameLogic : MonoBehaviour {
             score.gameObject.SetActive(false);
 
         GameManager.Instance.gameRunning = true;
+        startTime = Time.time;
 
     }
 
@@ -225,17 +226,17 @@ public class GameLogic : MonoBehaviour {
         {
             case 0:
                 expResult = numberA + numberB;
-                opText.text = " <color=green> + </color> ";
+                opText.text = " <color=green>+</color> ";
                 opClean = " + ";
                 break;
             case 1:
                 expResult = numberA - numberB;
-                opText.text = " <color=red> - </color> ";
+                opText.text = " <color=red>-</color> ";
                 opClean = " - ";
                 break;
             case 2:
                 expResult = numberA * numberB;
-                opText.text = " <color=#00aaff> * </color> ";
+                opText.text = " <color=#00aaff>*</color> ";
                 opClean = " * ";
                 break;
             default:
@@ -246,7 +247,7 @@ public class GameLogic : MonoBehaviour {
         int r = Random.Range(0, entryClip.Length);
 
         anim.SetTrigger(entryClip[r].name);
-        yield return new WaitForSeconds(entryClip[r].length / 2);
+        yield return new WaitForSeconds(entryClip[r].length);
 
         if (!numberAText.gameObject.activeSelf)
             numberAText.gameObject.SetActive(true);
@@ -280,13 +281,6 @@ public class GameLogic : MonoBehaviour {
                 eScores.Add(nO.score);
             }
         }
-        //if (GameManager.Instance.gameMode == 0)
-        //{
-        //    eScores.Clear();
-        //    eScores.Add(0);
-        //    eIDs.Clear();
-        //    eIDs.Add(0);
-        //}
 
 
         if (inputField.text.Length != 0)   
@@ -296,20 +290,20 @@ public class GameLogic : MonoBehaviour {
             {
                 GameManager.Instance.correctAnswers++;
                 scoreNotification.text = "<color=green>+1";
-                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, eIDs, eScores));
+                GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, eIDs, eScores));
             }
             else
             {
                 GameManager.Instance.wrongAnswers++;
                 scoreNotification.text = "<color=red>-1";
-                GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, eIDs, eScores));
+                GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, eIDs, eScores));
             }
         }
         else
         {
             GameManager.Instance.skippedAnswers++;
             scoreNotification.text = "+0";
-            GameManager.Instance.participant.tasks.Add(new TaskData(Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, eIDs, eScores));
+            GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, eIDs, eScores));
         }
 
         scoreNotificationAnim.SetTrigger("Up");

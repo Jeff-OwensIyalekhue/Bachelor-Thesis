@@ -44,7 +44,7 @@ public class NetworkSync : NetworkBehaviour {
     void Update () {        
         if (GameManager.Instance.playerList.Count == 1)
         {
-            if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 2)
+            if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 2 && GameManager.Instance.isHost)
             {
                 if (!fakeOpponent)
                 {
@@ -53,7 +53,7 @@ public class NetworkSync : NetworkBehaviour {
                 }
             }
         }
-        if (GameManager.Instance.playerList.Count < 4)
+        if (GameManager.Instance.playerList.Count < 4 && GameManager.Instance.isHost)
         {
             if (GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 3)
             {
@@ -116,19 +116,13 @@ public class NetworkSync : NetworkBehaviour {
         for(int j = 0; j  < i; j++)
         {
             dummy[j] = Instantiate(fakeEnemyPrefab);
-            //nO[j] = fakeEnemyPrefab.GetComponent<NetworkObject>();
-            //nO[j].connectionID = GameManager.Instance.playerListLength - 1;
-            //GameManager.Instance.playerList.Add(nO[j]);
-            //GameManager.Instance.playerListLength++;
+            NetworkServer.Spawn(dummy[j]);
         }
 
         yield return new WaitWhile(() => GameManager.Instance.gameRunning);
 
         for (int j = 0; j < i; j++)
         {
-            //    GameManager.Instance.playerList[GameManager.Instance.playerListLength - 1 - j].score = 0;
-            //    GameManager.Instance.playerList.RemoveAt(GameManager.Instance.playerListLength - 1 - j);
-            //    GameManager.Instance.playerListLength--;
             Destroy(dummy[i - 1 - j]);
         }
 

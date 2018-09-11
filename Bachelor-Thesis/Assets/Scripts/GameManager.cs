@@ -96,7 +96,7 @@ public class GameManager{
         
         using(StreamWriter file = new StreamWriter(path, true))
         {
-            file.WriteLine(DateTime.Today.ToString("D") + ", " + DateTime.Now.ToString("h:mm tt"));
+            file.WriteLine(DateTime.Today.ToString("D") + ", " + participant.startTime.ToString("h:mm:ss tt"));
 
             file.WriteLine("Particpant " + participant.identification);
             file.WriteLine("Player " + participant.connectionID);
@@ -135,6 +135,7 @@ public class GameManager{
             {
                 file.WriteLine(i + ". Task **************************");
                 i++;
+                file.WriteLine(task.startTime.ToString("N2"));
                 file.WriteLine(task.task);
                 file.WriteLine("time needed in seconds: " + task.timeNeeded.ToString("N2"));
                 file.WriteLine("solved: " + task.solved);
@@ -147,6 +148,53 @@ public class GameManager{
                 file.WriteLine("**********************************");
             }
 
+        }
+
+        using (StreamWriter fileCSV = new StreamWriter(pathFolder + "/Particpant" + participant.identification + ".csv", true))
+        {
+            fileCSV.WriteLine("Participant ID;Modus;Timestamp;Duration;Point");
+            string line = "";
+            foreach (TaskData task in participant.tasks)
+            {
+                line += participant.identification + ";";
+                switch (participant.gameMode)
+                {
+                    case 0:
+                        line += "Singleplayer;";
+                        break;
+                    case 1:
+                        line += "Halb-Coop;";
+                        break;
+                    case 2:
+                        line += "Versus;";
+                        break;
+                    case 3:
+                        line += "Party;";
+                        break;
+                    default:
+                        line += "mode error";
+                        break;
+                }
+                line += task.startTime.ToString("N2") + ";";
+                line += task.timeNeeded.ToString("N2") + ";";
+                if (task.solved)
+                {
+                    if (task.correctAnswer)
+                    {
+                        line += "+1";
+                    }
+                    else
+                    {
+                        line += "-1";
+                    }
+                }
+                else
+                {
+                    line += "0";
+                }
+                fileCSV.WriteLine(line);
+                line = "";
+            }
         }
 
         // Creating a serialized file of particpant data
@@ -210,17 +258,19 @@ public class ParticipantData
     public int identification;
     public int connectionID;
     public int gameMode;
+    public DateTime startTime;
     public float timePlayed;
     public int skippedTasks;
     public int correctAnswers;
     public int wrongAnswers;
     public List<TaskData> tasks;
 
-    public ParticipantData(int id, int gM)
+    public ParticipantData(int id, int gM, DateTime sT)
     {
         identification = id;
         connectionID = GameManager.Instance.ownConnectionID;
         gameMode = gM;
+        startTime = sT;
         timePlayed = 0;
         skippedTasks = 0;
         correctAnswers = 0;
@@ -231,6 +281,7 @@ public class ParticipantData
 [Serializable]
 public class TaskData
 {
+    public float startTime;
     public float timeNeeded;
     public string task;
     public bool solved;
@@ -238,9 +289,10 @@ public class TaskData
     public List<int> enemyIDs;
     public List<int> enemyScore;
 
-    public TaskData(float t, string ta, bool s, bool c, List<int> eID,List<int> eS)
+    public TaskData(float sT, float tN, string ta, bool s, bool c, List<int> eID,List<int> eS)
     {
-        timeNeeded = t;
+        startTime = sT;
+        timeNeeded = tN;
         task = ta;
         solved = s;
         correctAnswer = c;
