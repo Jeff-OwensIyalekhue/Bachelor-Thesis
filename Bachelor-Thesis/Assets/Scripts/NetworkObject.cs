@@ -80,7 +80,7 @@ public class NetworkObject : NetworkBehaviour {
                 GameManager.Instance.ownConnectionID = connectionID;
                  this.gameObject.name = "Player " + connectionID;
             }
-            if (!GameManager.Instance.gameRunning)
+            if (!GameManager.Instance.gameRunning && gameMode == GameManager.Instance.playerList[0].gameMode)
                 if (gameMode != GameManager.Instance.gameMode)
                     CmdModeUpdate(GameManager.Instance.gameMode);
 

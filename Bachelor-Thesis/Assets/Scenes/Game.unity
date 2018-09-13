@@ -349,6 +349,7 @@ GameObject:
   - component: {fileID: 326348604}
   - component: {fileID: 326348603}
   - component: {fileID: 326348602}
+  - component: {fileID: 326348605}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -371,7 +372,7 @@ Camera:
   m_GameObject: {fileID: 326348601}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.25490198, g: 0.003921569, b: 0.003921569, a: 1}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
@@ -416,6 +417,14 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!45 &326348605
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 326348601}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 2100000, guid: 72deae4d18418f94688abef8e8483df0, type: 2}
 --- !u!1 &411511649
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,6 +435,7 @@ GameObject:
   - component: {fileID: 411511650}
   - component: {fileID: 411511652}
   - component: {fileID: 411511651}
+  - component: {fileID: 411511653}
   m_Layer: 0
   m_Name: Scoreboard
   m_TagString: Untagged
@@ -497,10 +507,10 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 55
-  m_fontSizeBase: 55
+  m_fontSize: 46
+  m_fontSizeBase: 46
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -571,6 +581,24 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 411511649}
   m_CullTransparentMesh: 0
+--- !u!95 &411511653
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 411511649}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9ff6e8c1a199a954595422d720b2aca8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &516994290
 GameObject:
   m_ObjectHideFlags: 0
@@ -666,6 +694,48 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1001 &654780175
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4964744124621240, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1563eb3e07f7e6948b258bf08d0c8c7c, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &661803598
 GameObject:
   m_ObjectHideFlags: 0
@@ -1309,6 +1379,11 @@ MonoBehaviour:
   scoreBoard: {fileID: 411511651}
   scoreNotification: {fileID: 2078282936}
   scoreNotificationAnim: {fileID: 2078282935}
+  scoreBoardAnim: {fileID: 411511653}
+  audioSource: {fileID: 2078282938}
+  positv: {fileID: 8300000, guid: b882b5a36f82a714b958b819c38b0695, type: 3}
+  negativ: {fileID: 8300000, guid: 0abaa523f5679b346bd6f9870d82bc6c, type: 3}
+  drop: {fileID: 8300000, guid: 76f3b9d643f91d2429d3d7abe546975d, type: 3}
   anim: {fileID: 628194906}
   entryClip:
   - {fileID: 7400000, guid: 9bbaa57a2c12967439ea833d2aaae4fe, type: 2}
@@ -1399,7 +1474,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278217150
+    rgba: 27070
   m_fontColor: {r: 0.745283, g: 0.41323808, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_fontColorGradient:
@@ -1554,7 +1629,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278217150
+    rgba: 27070
   m_fontColor: {r: 0.745283, g: 0.41323808, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_fontColorGradient:
@@ -1579,7 +1654,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 350
   m_fontStyle: 0
-  m_textAlignment: 513
+  m_textAlignment: 514
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1621,7 +1696,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -1934,6 +2009,7 @@ GameObject:
   - component: {fileID: 2078282937}
   - component: {fileID: 2078282936}
   - component: {fileID: 2078282935}
+  - component: {fileID: 2078282938}
   m_Layer: 0
   m_Name: ScoreNotification
   m_TagString: Untagged
@@ -1957,7 +2033,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 56.5, y: 0}
-  m_SizeDelta: {x: 60, y: 60}
+  m_SizeDelta: {x: 70, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &2078282935
 Animator:
@@ -2005,7 +2081,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 50358718
   m_fontColor: {r: 0.745283, g: 0.41323808, b: 0, a: 0}
   m_enableVertexGradient: 0
   m_fontColorGradient:
@@ -2097,6 +2173,102 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2078282933}
   m_CullTransparentMesh: 0
+--- !u!82 &2078282938
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2078282933}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24301952, guid: b5f02ba29bfb54f4190dfc5e4eeaf340,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 70e3b724a6795ab4fa8ca2cda112cd56, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2130226271
 GameObject:
   m_ObjectHideFlags: 0
@@ -2160,7 +2332,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278217150
+    rgba: 27070
   m_fontColor: {r: 0.745283, g: 0.41323808, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_fontColorGradient:

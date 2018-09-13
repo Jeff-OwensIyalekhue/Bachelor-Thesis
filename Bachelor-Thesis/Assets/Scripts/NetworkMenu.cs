@@ -10,13 +10,23 @@ public class NetworkMenu : MonoBehaviour {
 
     public TMP_Text networkInfo;
     public GameObject inputPanel;
+    public GameObject mainMenu;
     public Canvas canvas;
 
 
     // Use this for initialization
     void Start () {
         if (GameManager.Instance.isConnected)
+        {
+            mainMenu.SetActive(true);
             inputPanel.SetActive(false);
+        }
+        else
+        {
+
+            mainMenu.SetActive(false);
+            inputPanel.SetActive(true);
+        }
 
         networkManager = FindObjectOfType<NetworkManager>();
         if(networkManager.networkAddress != "localhost")

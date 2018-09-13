@@ -8,19 +8,26 @@ using UnityEngine.EventSystems;
 public class GameLogic : MonoBehaviour {
 
     #region Vars
-    [Header("UI")]
+    [Header("General UI")]
     public TMP_Text timer;
     public TMP_Text numberAText;
     public TMP_Text opText;
     public TMP_Text numberBText;
     public TMP_InputField inputField;
     EventSystem eventSystem;
+
+    [Header("Score UI")]
     public TMP_Text score;
     public TMP_Text scoreBoard;
     List<int> scoreList = new List<int>();
     bool positionInScoreboardSet = false;
     public TMP_Text scoreNotification;
     public Animator scoreNotificationAnim;
+    public Animator scoreBoardAnim;
+    public AudioSource audioSource;
+    public AudioClip positv;
+    public AudioClip negativ;
+    public AudioClip drop;
 
     [Header("Task Transitions")]
     public Animator anim;
@@ -35,6 +42,8 @@ public class GameLogic : MonoBehaviour {
 
     [Header("")]
     public bool testing = false;
+
+    int ranking = 0;
 
     int numberA; 
     int numberB;
@@ -143,6 +152,8 @@ public class GameLogic : MonoBehaviour {
         yield return new WaitForSeconds(1);
         timer.text = "<color=yellow>2</color>";
         yield return new WaitForSeconds(1);
+        int r = Random.Range(0, entryClip.Length);
+        anim.SetTrigger(entryClip[r].name);
         timer.text = "<color=green>1</color>";
         yield return new WaitForSeconds(1);
 
@@ -196,7 +207,10 @@ public class GameLogic : MonoBehaviour {
             {
                 if(!positionInScoreboardSet && scoreList[i] == (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers))
                 {
+                    if (i <= ranking && i != scoreList.Count - 1)
+                        scoreBoardAnim.SetTrigger("notify");
                     positionInScoreboardSet = true;
+                    ranking = i;
                     scoreBoard.text += "you\n";
                 }
                 else
@@ -226,17 +240,17 @@ public class GameLogic : MonoBehaviour {
         {
             case 0:
                 expResult = numberA + numberB;
-                opText.text = " <color=green>+</color> ";
+                opText.text = "<color=green>+</color>";
                 opClean = " + ";
                 break;
             case 1:
                 expResult = numberA - numberB;
-                opText.text = " <color=red>-</color> ";
+                opText.text = "<color=red>-</color>";
                 opClean = " - ";
                 break;
             case 2:
                 expResult = numberA * numberB;
-                opText.text = " <color=#00aaff>*</color> ";
+                opText.text = "<color=#00aaff>*</color>";
                 opClean = " * ";
                 break;
             default:
@@ -244,10 +258,10 @@ public class GameLogic : MonoBehaviour {
                 break;
         }
 
-        int r = Random.Range(0, entryClip.Length);
+        //int r = Random.Range(0, entryClip.Length);
 
-        anim.SetTrigger(entryClip[r].name);
-        yield return new WaitForSeconds(entryClip[r].length);
+        //anim.SetTrigger(entryClip[r].name);
+        //yield return new WaitForSeconds(entryClip[r].length * (1/3));
 
         if (!numberAText.gameObject.activeSelf)
             numberAText.gameObject.SetActive(true);
@@ -259,6 +273,7 @@ public class GameLogic : MonoBehaviour {
         timeTask = Time.time;
 
         transition = false;
+        yield return null;
     }
 
     public void Solve()
@@ -288,12 +303,14 @@ public class GameLogic : MonoBehaviour {
             entResult = int.Parse(inputField.text);
             if (entResult == expResult)
             {
+                audioSource.clip = positv;
                 GameManager.Instance.correctAnswers++;
                 scoreNotification.text = "<color=green>+1";
                 GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, eIDs, eScores));
             }
             else
             {
+                audioSource.clip = negativ;
                 GameManager.Instance.wrongAnswers++;
                 scoreNotification.text = "<color=red>-1";
                 GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, eIDs, eScores));
@@ -301,24 +318,27 @@ public class GameLogic : MonoBehaviour {
         }
         else
         {
+            audioSource.clip = drop;
             GameManager.Instance.skippedAnswers++;
             scoreNotification.text = "+0";
             GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, eIDs, eScores));
         }
 
-        scoreNotificationAnim.SetTrigger("Up");
 
         StartCoroutine(TaskExit());
     }
     IEnumerator TaskExit()
     {
+        scoreNotificationAnim.SetTrigger("Up");
+        yield return new WaitForSeconds(0.6f);
+        audioSource.Play();
         int r = Random.Range(0, exitClip.Length);
         anim.SetTrigger(exitClip[r].name);
         yield return new WaitForSeconds(exitClip[r].length);
 
-        numberAText.gameObject.SetActive(false);
-        numberBText.gameObject.SetActive(false);
-        opText.gameObject.SetActive(false);
+        //numberAText.gameObject.SetActive(false);
+        //numberBText.gameObject.SetActive(false);
+        //opText.gameObject.SetActive(false);
 
         inputField.DeactivateInputField();
         inputField.text = "";
