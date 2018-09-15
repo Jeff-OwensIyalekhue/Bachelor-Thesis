@@ -63,7 +63,7 @@ public class GameLogic : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         int r = Random.Range(0, 100);
-        GameManager.Instance.participant = new ParticipantData(r, GameManager.Instance.gameMode, System.DateTime.Now);
+        GameManager.Instance.ownParticipant = new ParticipantData(r, GameManager.Instance.gameMode, System.DateTime.Now);
         eventSystem = FindObjectOfType<EventSystem>();
     }
 	
@@ -85,12 +85,12 @@ public class GameLogic : MonoBehaviour {
             GameManager.Instance.gameRunning = false;
 
             // Enter participant information
-            GameManager.Instance.participant.correctAnswers = GameManager.Instance.correctAnswers;
-            GameManager.Instance.participant.wrongAnswers = GameManager.Instance.wrongAnswers;
-            GameManager.Instance.participant.skippedTasks = GameManager.Instance.skippedAnswers;
-            GameManager.Instance.participant.timePlayed = Time.time - timeStart;
+            GameManager.Instance.ownParticipant.correctAnswers = GameManager.Instance.correctAnswers;
+            GameManager.Instance.ownParticipant.wrongAnswers = GameManager.Instance.wrongAnswers;
+            GameManager.Instance.ownParticipant.skippedTasks = GameManager.Instance.skippedAnswers;
+            GameManager.Instance.ownParticipant.timePlayed = Time.time - timeStart;
 
-            GameManager.Instance.CreateUserData();
+            GameManager.Instance.CreateUserData(GameManager.Instance.ownParticipant);
 
             // Reset GameManager Data
             GameManager.Instance.correctAnswers = 0;
@@ -110,11 +110,11 @@ public class GameLogic : MonoBehaviour {
                 timer.text = "end";
 
                 // Enter participant information
-                GameManager.Instance.participant.correctAnswers = GameManager.Instance.correctAnswers;
-                GameManager.Instance.participant.wrongAnswers = GameManager.Instance.wrongAnswers;
-                GameManager.Instance.participant.skippedTasks = GameManager.Instance.skippedAnswers;
-                GameManager.Instance.participant.timePlayed = Time.time - timeStart;
-                GameManager.Instance.CreateUserData();
+                GameManager.Instance.ownParticipant.correctAnswers = GameManager.Instance.correctAnswers;
+                GameManager.Instance.ownParticipant.wrongAnswers = GameManager.Instance.wrongAnswers;
+                GameManager.Instance.ownParticipant.skippedTasks = GameManager.Instance.skippedAnswers;
+                GameManager.Instance.ownParticipant.timePlayed = Time.time - timeStart;
+                GameManager.Instance.CreateUserData(GameManager.Instance.ownParticipant);
 
                 // Reset GameManager Data
                 GameManager.Instance.correctAnswers = 0;
@@ -304,24 +304,27 @@ public class GameLogic : MonoBehaviour {
             if (entResult == expResult)
             {
                 audioSource.clip = positv;
+                scoreNotificationAnim.SetTrigger("Up");
                 GameManager.Instance.correctAnswers++;
                 scoreNotification.text = "<color=green>+1";
-                GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, eIDs, eScores));
+                GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, eIDs, eScores));
             }
             else
             {
                 audioSource.clip = negativ;
+                scoreNotificationAnim.SetTrigger("Down");
                 GameManager.Instance.wrongAnswers++;
                 scoreNotification.text = "<color=red>-1";
-                GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, eIDs, eScores));
+                GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, eIDs, eScores));
             }
         }
         else
         {
             audioSource.clip = drop;
+            scoreNotificationAnim.SetTrigger("N");
             GameManager.Instance.skippedAnswers++;
             scoreNotification.text = "+0";
-            GameManager.Instance.participant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, eIDs, eScores));
+            GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, eIDs, eScores));
         }
 
 
@@ -329,7 +332,6 @@ public class GameLogic : MonoBehaviour {
     }
     IEnumerator TaskExit()
     {
-        scoreNotificationAnim.SetTrigger("Up");
         yield return new WaitForSeconds(0.6f);
         audioSource.Play();
         int r = Random.Range(0, exitClip.Length);

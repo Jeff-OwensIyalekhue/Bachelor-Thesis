@@ -19,6 +19,7 @@ public class MenuScript : MonoBehaviour {
 
     public TMP_Text showTimerButtonText;
     public Slider musicVolBar;
+    public Slider sfxVolBar;
 
     NetworkManager networkManager;
 
@@ -32,6 +33,7 @@ public class MenuScript : MonoBehaviour {
         networkManager = FindObjectOfType<NetworkManager>();
         dropdown.value = GameManager.Instance.gameMode;
         musicVolBar.value = GameManager.Instance.musicVolume;
+        sfxVolBar.value = GameManager.Instance.sfxVolume;
     }
 	
 	// Update is called once per frame
@@ -85,6 +87,11 @@ public class MenuScript : MonoBehaviour {
     {
         MusicManager mM = FindObjectOfType<MusicManager>();
         mM.SetMusicLevel(musicLvl);
+    }
+    public void SetSfxLevel(float sfxLvl)
+    {
+        MusicManager mM = FindObjectOfType<MusicManager>();
+        mM.SetSfxLevel(sfxLvl);
     }
 
     public void SaveOptions()

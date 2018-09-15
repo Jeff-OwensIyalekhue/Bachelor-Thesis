@@ -84,7 +84,7 @@ public class MusicManager : MonoBehaviour
     public void SetSfxLevel(float sfxLevel)
     {
         mainMixer.SetFloat("sfxVol", sfxLevel);
-        //GameData.Instance.sfxVolume = sfxLevel;
+        GameManager.Instance.sfxVolume = sfxLevel;
     }
 
     // Call this function to very quickly fade up the volume of master mixer
