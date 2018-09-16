@@ -22,7 +22,7 @@ public class NetworkObject : NetworkBehaviour {
     float timeLimit;
 
     [SyncVar]
-    int gameMode = 0;
+    public int gameMode = 0;
     
 
 	// Use this for initialization
@@ -80,15 +80,30 @@ public class NetworkObject : NetworkBehaviour {
                 GameManager.Instance.ownConnectionID = connectionID;
                  this.gameObject.name = "Player " + connectionID;
             }
-            if (!GameManager.Instance.gameRunning && gameMode == GameManager.Instance.playerList[0].gameMode)
-                if (gameMode != GameManager.Instance.gameMode)
-                    CmdModeUpdate(GameManager.Instance.gameMode);
 
             if (GameManager.Instance.gameRunning)
-                if (this.score != GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
+            {
+                if (this.score != GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers || fakePlayer)
                 {
                     CmdScoreUpdate(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers);
                 }
+            }
+            else
+            {
+                if (gameMode == GameManager.Instance.playerList[0].gameMode)
+                {
+                    if (gameMode != GameManager.Instance.gameMode)
+                        CmdModeUpdate(GameManager.Instance.gameMode);
+
+                }
+                //else
+                //{
+                //    GameManager.Instance.gameMode = GameManager.Instance.playerList[0].gameMode;
+                //    if (gameMode != GameManager.Instance.gameMode)
+                //        CmdModeUpdate(GameManager.Instance.gameMode);
+                //}
+            }
+
             // set client unready if start is not pressed
             if (!GameManager.Instance.startPressed && clientReady)
             {
