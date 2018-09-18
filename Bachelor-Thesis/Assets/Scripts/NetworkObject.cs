@@ -90,11 +90,14 @@ public class NetworkObject : NetworkBehaviour {
             }
             else
             {
+                if(GameManager.Instance.ownConnectionID != 0)
+                    if (GameManager.Instance.gameMode != GameManager.Instance.playerList[0].gameMode)
+                        GameManager.Instance.gameMode = GameManager.Instance.playerList[0].gameMode;
+
                 if (gameMode == GameManager.Instance.playerList[0].gameMode)
                 {
                     if (gameMode != GameManager.Instance.gameMode)
                         CmdModeUpdate(GameManager.Instance.gameMode);
-
                 }
                 //else
                 //{

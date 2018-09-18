@@ -7,6 +7,7 @@ public class GMEditorMonitor : MonoBehaviour {
     [SerializeField]
     List<NetworkObject> playerList = GameManager.Instance.playerList;
     public string path = GameManager.Instance.pathToSaveLocation;
+    public int turn = GameManager.Instance.currentParticipantTurn;
   
     #region Singleton
     public static GMEditorMonitor Instance;
@@ -30,8 +31,9 @@ public class GMEditorMonitor : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.U))
         {
-            playerList = GameManager.Instance.playerList;
-            path= GameManager.Instance.pathToSaveLocation;
+            turn = GameManager.Instance.currentParticipantTurn;
+            //playerList = GameManager.Instance.playerList;
+            //path= GameManager.Instance.pathToSaveLocation;
         }
     }
 }

@@ -54,7 +54,7 @@ public class GameLogic : MonoBehaviour {
 
     int entResult;                  // entered rusult
 
-    float startTime, timeTask;                 // start time of a task
+    float startTime, timeTask;      // start time of a task
 
     bool answered = true;
     float timeStart;                // start time of the  game after the start countdown
@@ -62,8 +62,8 @@ public class GameLogic : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        int r = Random.Range(0, 100);
-        GameManager.Instance.ownParticipant = new ParticipantData(r, GameManager.Instance.gameMode, System.DateTime.Now);
+        //int r = Random.Range(0, 100);
+        GameManager.Instance.ownParticipant = new ParticipantData(GameManager.Instance.gameMode, System.DateTime.Now);
         eventSystem = FindObjectOfType<EventSystem>();
     }
 	
@@ -172,13 +172,16 @@ public class GameLogic : MonoBehaviour {
         GameManager.Instance.gameRunning = true;
         startTime = Time.time;
 
+        if (GameManager.Instance.currentParticipantTurn >= 4)
+            GameManager.Instance.currentParticipantTurn = 0;
+        GameManager.Instance.currentParticipantTurn++;
     }
 
     void ScoreUpdate()
     {
         if(GameManager.Instance.gameMode < 2)
         {
-            score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
+            score.text = /*"<size=+50>" + */(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
         }
         else if (GameManager.Instance.gameMode == 2)
         {
@@ -186,13 +189,13 @@ public class GameLogic : MonoBehaviour {
                 return;
 
             if (GameManager.Instance.ownConnectionID == 0)
-                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[1].score;
+                score.text = /*"<size=+50>" + */"<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[1].score;
             else if (GameManager.Instance.ownConnectionID == 1)
-                score.text = "<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[0].score;
+                score.text = /*"<size=+50>" + */"<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[0].score;
         }
         else if(GameManager.Instance.gameMode == 3)
         {
-            score.text = (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
+            score.text = /*"<size=150>" + */(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
 
             //GameManager.Instance.playerList.Sort();
             scoreBoard.text = "";
@@ -202,7 +205,7 @@ public class GameLogic : MonoBehaviour {
                 scoreList.Add(nO.score);
             }
             scoreList.Sort();
-            scoreBoard.text = "Scores:\n";
+            scoreBoard.text = "<size=+20>" + "Scores:\n";
             for (int i = scoreList.Count - 1; i >= 0; i--)
             {
                 if(!positionInScoreboardSet && scoreList[i] == (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers))
@@ -217,6 +220,16 @@ public class GameLogic : MonoBehaviour {
                     scoreBoard.text += scoreList[i] + "\n";
             }
             positionInScoreboardSet = false;
+        }
+        else if (GameManager.Instance.gameMode == 4)
+        {
+            int s = 0;
+            foreach (NetworkObject nO in GameManager.Instance.playerList)
+            {
+                s += nO.score;
+            }
+
+            score.text = "" +s;
         }
     }
 
@@ -288,12 +301,17 @@ public class GameLogic : MonoBehaviour {
 
         List<int> eIDs = new List<int>();
         List<int> eScores = new List<int>();
+        bool behind = false;
         foreach (NetworkObject nO in GameManager.Instance.playerList)
         {
             if (nO.connectionID != GameManager.Instance.ownConnectionID)
             {
                 eIDs.Add(nO.connectionID);
                 eScores.Add(nO.score);
+
+                if (GameManager.Instance.playerList[GameManager.Instance.ownConnectionID].score < nO.score
+                    && !behind)
+                    behind = true;
             }
         }
 
@@ -306,16 +324,16 @@ public class GameLogic : MonoBehaviour {
                 audioSource.clip = positv;
                 scoreNotificationAnim.SetTrigger("Up");
                 GameManager.Instance.correctAnswers++;
-                scoreNotification.text = "<color=green>+1";
-                GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, eIDs, eScores));
+                scoreNotification.text = "<size=+20>" + "<color=green>+1";
+                GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - startTime, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, behind, eIDs, eScores));
             }
             else
             {
                 audioSource.clip = negativ;
                 scoreNotificationAnim.SetTrigger("Down");
                 GameManager.Instance.wrongAnswers++;
-                scoreNotification.text = "<color=red>-1";
-                GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, eIDs, eScores));
+                scoreNotification.text = "<size=+20>" + "<color=red>-1";
+                GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - startTime, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, behind, eIDs, eScores));
             }
         }
         else
@@ -323,8 +341,8 @@ public class GameLogic : MonoBehaviour {
             audioSource.clip = drop;
             scoreNotificationAnim.SetTrigger("N");
             GameManager.Instance.skippedAnswers++;
-            scoreNotification.text = "+0";
-            GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - timeTask, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, eIDs, eScores));
+            scoreNotification.text = "<size=+20>" + "+0";
+            GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - startTime, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, behind, eIDs, eScores));
         }
 
 

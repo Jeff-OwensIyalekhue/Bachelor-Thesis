@@ -33,18 +33,21 @@ public class GameManager{
     #endregion
 
     public bool showTimer = true;
-    public float timeLimit = 0;            // if value <= 0: no time limit
+    public float timeLimit = 0;                 // if value <= 0: no time limit
     public string pathToSaveLocation = "I:/";
     public float musicVolume = -80;
     public float sfxVolume = -80;
 
+    public int currentParticipantTurn = 0;          // how many scenearios did he play
+    public int currentParticipantID = 1;
+    public string currentParticipantGender  = "n.a.";
     public ParticipantData ownParticipant;
 
     public int correctAnswers = 0;
     public int wrongAnswers = 0;
     public int skippedAnswers = 0;
 
-    public int gameMode = 0;            // 0:= SinglePlayer; 1:= HalbCoop; 2:= Versus
+    public int gameMode = 0;                    // 0:= SinglePlayer; 1:= HalbCoop; 2:= Versus
     public int nGameMode = -1;
     public int ownConnectionID = 0;
 
@@ -66,19 +69,19 @@ public class GameManager{
     {
 
         string pathFolder = pathToSaveLocation + "Session_"
-                            + participant.startTime.ToString("hh-mm") + "_" + DateTime.Today.ToString("dd-M-yyyy/")
+                            + DateTime.Today.ToString("dd-M-yyyy/") + participant.startTime.ToString("hh-mmtt/")
                             + "Participant" + participant.identification;
 
         try
         {
             // Determine whether the directory exists.
+            int i = 0;
             while (Directory.Exists(pathFolder))
             {
-                participant.identification++;
+                i++;
                 pathFolder = pathToSaveLocation + "Session_"
-                            + participant.startTime.ToString("hh-mm") + "_" + DateTime.Today.ToString("dd-M-yyyy/")
-                            + "Particpant" + participant.identification; ;
-                //return;
+                            + DateTime.Today.ToString("dd-M-yyyy/") + participant.startTime.ToString("hh-mmtt/")
+                            + "Particpant" + participant.identification + "(" + i + ")";                
             }
 
             // Try to create the directory.
@@ -104,6 +107,8 @@ public class GameManager{
             file.WriteLine(DateTime.Today.ToString("D") + ", " + participant.startTime.ToString("h:mm:ss tt"));
 
             file.WriteLine("Participant " + participant.identification);
+            file.WriteLine("Gender:  " + participant.gender);
+            file.WriteLine("" + currentParticipantTurn + ". Turn");
             file.WriteLine("Player " + participant.connectionID);
 
             switch (participant.gameMode)
@@ -119,6 +124,9 @@ public class GameManager{
                     break;
                 case 3:
                     file.WriteLine("Party");
+                    break;
+                case 4:
+                    file.WriteLine("Collab");
                     break;
                 default:
                     file.WriteLine("Unknown Mode");
@@ -140,11 +148,13 @@ public class GameManager{
             {
                 file.WriteLine(i + ". Task **************************");
                 i++;
-                file.WriteLine(task.startTime.ToString("N2"));
+                file.WriteLine("Start at: " + task.startTime.ToString("N2"));                
+                file.WriteLine("End at: " + task.endTime.ToString("N2"));
                 file.WriteLine(task.task);
                 file.WriteLine("time needed in seconds: " + task.timeNeeded.ToString("N2"));
                 file.WriteLine("solved: " + task.solved);
                 file.WriteLine("correct answer: " + task.correctAnswer);
+                file.WriteLine("is the player behind: " + task.behind);
                 file.WriteLine("Enemy score at this point: ");
                 for(int j = 0; j < task.enemyIDs.Count; j++)
                 {
@@ -157,11 +167,13 @@ public class GameManager{
 
         using (StreamWriter fileCSV = new StreamWriter(pathFolder + "/Particpant" + participant.identification + ".csv", true))
         {
-            fileCSV.WriteLine("Participant ID;Modus;Timestamp;Duration;Point");
+            fileCSV.WriteLine("Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point");
             string line = "";
             foreach (TaskData task in participant.tasks)
             {
                 line += participant.identification + ";";
+                line += participant.gender + ";";
+                line += currentParticipantTurn + ";";
                 switch (participant.gameMode)
                 {
                     case 0:
@@ -176,12 +188,17 @@ public class GameManager{
                     case 3:
                         line += "Party;";
                         break;
+                    case 4:
+                        line += "Collab;";
+                        break;
                     default:
-                        line += "mode error";
+                        line += "mode error;";
                         break;
                 }
                 line += task.startTime.ToString("N2") + ";";
+                line += task.endTime.ToString("N2") + ";";
                 line += task.timeNeeded.ToString("N2") + ";";
+                line += task.behind + ";";
                 if (task.solved)
                 {
                     if (task.correctAnswer)
@@ -262,6 +279,8 @@ public class GameManager{
 public class ParticipantData
 {
     public int identification;
+    public string gender;
+    public int turn;
     public int connectionID;
     public int gameMode;
     public DateTime startTime;
@@ -271,9 +290,11 @@ public class ParticipantData
     public int wrongAnswers;
     public List<TaskData> tasks;
 
-    public ParticipantData(int id, int gM, DateTime sT)
+    public ParticipantData(int gM, DateTime sT)
     {
-        identification = id;
+        identification = GameManager.Instance.currentParticipantID;
+        gender = GameManager.Instance.currentParticipantGender;
+        turn = GameManager.Instance.currentParticipantTurn;
         connectionID = GameManager.Instance.ownConnectionID;
         gameMode = gM;
         startTime = sT;
@@ -288,20 +309,24 @@ public class ParticipantData
 public class TaskData
 {
     public float startTime;
+    public float endTime;
     public float timeNeeded;
     public string task;
     public bool solved;
     public bool correctAnswer;
+    public bool behind;
     public List<int> enemyIDs;
     public List<int> enemyScore;
 
-    public TaskData(float sT, float tN, string ta, bool s, bool c, List<int> eID,List<int> eS)
+    public TaskData(float sT, float eT, string ta, bool s, bool c, bool b, List<int> eID,List<int> eS)
     {
         startTime = sT;
-        timeNeeded = tN;
+        endTime = eT;
+        timeNeeded = eT - sT;
         task = ta;
         solved = s;
         correctAnswer = c;
+        behind = b;
         enemyIDs = eID;
         enemyScore = eS;
     }

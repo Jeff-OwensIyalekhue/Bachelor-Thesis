@@ -58,7 +58,8 @@ public class MenuScript : MonoBehaviour {
         if (GameManager.Instance.isHost && !dropdown.interactable)
             dropdown.interactable = true;
     }
-
+    
+    #region Set Options
     public void SetSavePath(string path)
     {
         savePathInputField.text = "";
@@ -98,7 +99,20 @@ public class MenuScript : MonoBehaviour {
     {
         GameManager.Instance.SaveOptions();
     }
+    #region Participant
+    public void SetID(string s)
+    {
+        GameManager.Instance.currentParticipantID = int.Parse(s);
+    }
 
+    public void SetG(string s)
+    {
+        GameManager.Instance.currentParticipantGender = s;
+    }
+    #endregion
+    #endregion
+
+    #region Mainmenu Functions
     public void SetReady()
     {
         if (GameManager.Instance.startPressed)
@@ -123,4 +137,5 @@ public class MenuScript : MonoBehaviour {
     {
         GameManager.Instance.gameMode = i;
     }
+    #endregion
 }
