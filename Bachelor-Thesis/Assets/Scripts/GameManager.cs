@@ -32,29 +32,40 @@ public class GameManager{
     }
     #endregion
 
+    #region setting vars
+    public bool randomTasks = false;
+    public int taskPerTurn = 200;
+    public int turnsToPlay = 4;
+    public int intervalMin = 0;
+    public int intervalMax = 10;                            // exclusive
+    public bool showScore = true;
+
     public bool showTimer = true;
-    public float timeLimit = 0;                 // if value <= 0: no time limit
+    public float timeLimit = 0;                             // if value <= 0: no time limit
+
     public string pathToSaveLocation = "I:/";
+
     public float musicVolume = -80;
     public float sfxVolume = -80;
 
-    public int currentParticipantTurn = 0;          // how many scenearios did he play
+    public int currentParticipantTurn = 0;                  // how many scenearios did he play
     public int currentParticipantID = 1;
     public string currentParticipantGender  = "n.a.";
+    #endregion
+    #region status vars
     public ParticipantData ownParticipant;
+    public GeneratedTasks generatedTasks;
 
     public int correctAnswers = 0;
     public int wrongAnswers = 0;
     public int skippedAnswers = 0;
 
-    public int gameMode = 0;                    // 0:= SinglePlayer; 1:= HalbCoop; 2:= Versus
+    public int gameMode = 0;                                // 0:= SinglePlayer; 1:= HalbCoop; 2:= Versus; 3:= Party; 4:= Collab
     public int nGameMode = -1;
     public int ownConnectionID = 0;
 
     public List<NetworkObject> playerList = new List<NetworkObject>();
     
-    //public int playerListLength = 0;
-
     public bool preGameRunning = false;
     public bool gameRunning = false;
     
@@ -64,7 +75,54 @@ public class GameManager{
     public bool startPressed = false;
     public bool gmClientReady = false;
     public bool everybodyReady = false;
-    
+    #endregion
+
+    // Generate tasks
+    public void GenerateTasks()
+    {
+        generatedTasks = new GeneratedTasks();
+        for(int j = 0; j < turnsToPlay; j++)
+        {
+            int[][] tasks = new int[taskPerTurn][];
+            int i;
+
+            for (i = 0; i < taskPerTurn; i++)
+            {
+                tasks[i] = new int[3];
+                tasks[i][0] = UnityEngine.Random.Range(intervalMin, intervalMax);    // numberA
+                tasks[i][1] = UnityEngine.Random.Range(0, 3);                        // op
+                tasks[i][2] = UnityEngine.Random.Range(intervalMin, intervalMax);    // numberB
+            }
+            generatedTasks.turns.Add(tasks);
+        }
+        if (Directory.Exists(pathToSaveLocation))
+        {
+            BinaryFormatter bF = new BinaryFormatter();
+            FileStream file = File.Create(pathToSaveLocation + "/generatedTasks.dat");
+
+            GeneratedTasks data = generatedTasks;
+
+            bF.Serialize(file, data);
+            file.Close();
+        }
+    }
+    public void LoadGeneratedTasks()
+    {
+        if (File.Exists(pathToSaveLocation + "/generatedTasks.dat"))
+        {
+            BinaryFormatter bF = new BinaryFormatter();
+            FileStream file = File.Open(pathToSaveLocation + "/generatedTasks.dat", FileMode.Open);
+            GeneratedTasks data = (GeneratedTasks)bF.Deserialize(file);
+            file.Close();
+
+            generatedTasks = data;
+        }
+        else
+        {
+            GenerateTasks();
+        }
+    }
+
     public void CreateUserData(ParticipantData participant)
     {
 
@@ -230,26 +288,35 @@ public class GameManager{
 
     }
 
+    // Game Settings
     public void SaveOptions()
     {
-        BinaryFormatter bF = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath +"/options.dat");
-
-        OptionsData data = new OptionsData(showTimer, timeLimit, pathToSaveLocation, musicVolume, sfxVolume);
-        
-        bF.Serialize(file, data);
-        file.Close();
-    }
-
-    public void LoadOptions()
-    {
-        if (File.Exists(Application.persistentDataPath + "/options.dat"))
+        if (Directory.Exists(pathToSaveLocation))
         {
             BinaryFormatter bF = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/options.dat", FileMode.Open);
+            FileStream file = File.Create(pathToSaveLocation + "/options.dat");
+
+            OptionsData data = new OptionsData(intervalMin, intervalMax, turnsToPlay, taskPerTurn, randomTasks, showScore, showTimer, timeLimit, pathToSaveLocation, musicVolume, sfxVolume);
+        
+            bF.Serialize(file, data);
+            file.Close();
+        }
+    }
+    public void LoadOptions()
+    {
+        if (File.Exists(pathToSaveLocation + "/options.dat"))
+        {
+            BinaryFormatter bF = new BinaryFormatter();
+            FileStream file = File.Open(pathToSaveLocation + "/options.dat", FileMode.Open);
             OptionsData data = (OptionsData)bF.Deserialize(file);
             file.Close();
 
+            intervalMin = data.intervalMin;
+            intervalMax = data.intervalMax;
+            turnsToPlay = data.turnsToPlay;
+            taskPerTurn = data.tasksPerTurn;
+            randomTasks = data.randomTasks;
+            showScore = data.showScore;
             showTimer = data.showTimer;
             timeLimit = data.timeLimit;
             pathToSaveLocation = data.pathToSaveLocation;
@@ -333,16 +400,38 @@ public class TaskData
 }
 
 [Serializable]
+public class GeneratedTasks
+{
+    public List<int[][]> turns;
+
+    public GeneratedTasks()
+    {
+        turns = new List<int[][]>();
+    }
+}
+
+[Serializable]
 public class OptionsData
 {
+    public int intervalMin, intervalMax;
+    public int turnsToPlay;
+    public int tasksPerTurn;
+    public bool randomTasks;
+    public bool showScore;
     public bool showTimer;
     public float timeLimit;
     public string pathToSaveLocation;
     public float musicVolume;
     public float sfxVolume;
 
-    public OptionsData(bool sT, float t, string p, float m, float sfx)
+    public OptionsData(int min, int max, int turns, int tPT, bool rT, bool shS, bool sT, float t, string p, float m, float sfx)
     {
+        intervalMin = min;
+        intervalMax = max;
+        turnsToPlay = turns;
+        tasksPerTurn = tPT;
+        randomTasks = rT;
+        showScore = shS;
         showTimer = sT;
         timeLimit = t;
         pathToSaveLocation = p;

@@ -34,16 +34,9 @@ public class GameLogic : MonoBehaviour {
     public AnimationClip[] entryClip;
     public AnimationClip[] exitClip;
     bool transition = false;
-
-    [Header("Settings")]
-    public int intervalMin = 0;
-    public int intervalMax = 10;    // exclusive
-    public bool showScore = true;
-
-    [Header("")]
-    public bool testing = false;
-
+    
     int ranking = 0;
+    int taskIteration = 0;
 
     int numberA; 
     int numberB;
@@ -80,7 +73,7 @@ public class GameLogic : MonoBehaviour {
             return;
 
         // if there is no time limit, end the game when escape is pressed
-        if(/*timeLimit <= 0 &&*/ Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape))
         {
             GameManager.Instance.gameRunning = false;
 
@@ -100,7 +93,7 @@ public class GameLogic : MonoBehaviour {
 
             NetworkSync.Load();
         }
-        if (GameManager.Instance.gameRunning || testing)
+        if (GameManager.Instance.gameRunning)
         {
             // if time limit is reached ends the game and returns to menu
             if (GameManager.Instance.timeLimit > 0 && (GameManager.Instance.timeLimit + timeStart - Time.time) <= 0)
@@ -166,13 +159,13 @@ public class GameLogic : MonoBehaviour {
             timer.gameObject.SetActive(false);
         timeStart = Time.time;
 
-        if (!showScore)
+        if (!GameManager.Instance.showScore)
             score.gameObject.SetActive(false);
 
         GameManager.Instance.gameRunning = true;
         startTime = Time.time;
 
-        if (GameManager.Instance.currentParticipantTurn >= 4)
+        if (GameManager.Instance.currentParticipantTurn >= GameManager.Instance.turnsToPlay)
             GameManager.Instance.currentParticipantTurn = 0;
         GameManager.Instance.currentParticipantTurn++;
     }
@@ -239,10 +232,22 @@ public class GameLogic : MonoBehaviour {
         transition = true;
 
         answered = false;
-        numberA = Random.Range(intervalMin, intervalMax);
-        numberB = Random.Range(intervalMin, intervalMax);
-        op = Random.Range(0, 3);
-        //Debug.Break();
+
+        if (GameManager.Instance.randomTasks)
+        {
+            numberA = Random.Range(GameManager.Instance.intervalMin, GameManager.Instance.intervalMax);
+            op = Random.Range(0, 3);
+            numberB = Random.Range(GameManager.Instance.intervalMin, GameManager.Instance.intervalMax);
+        }
+        else
+        {
+            int[][] turn = GameManager.Instance.generatedTasks.turns[GameManager.Instance.currentParticipantTurn - 1];
+            numberA = turn[taskIteration][0];
+            op = turn[taskIteration][1];
+            numberB = turn[taskIteration][2];
+            taskIteration++;
+        }
+
         StartCoroutine(TaskEntry());
     }
     IEnumerator TaskEntry()
@@ -291,9 +296,8 @@ public class GameLogic : MonoBehaviour {
 
     public void Solve()
     {
-        if (!testing)
-            if (!GameManager.Instance.gameRunning)
-                return;
+        if (!GameManager.Instance.gameRunning)
+            return;
         if (transition)
             return;
 
@@ -322,7 +326,8 @@ public class GameLogic : MonoBehaviour {
             if (entResult == expResult)
             {
                 audioSource.clip = positv;
-                scoreNotificationAnim.SetTrigger("Up");
+                if(GameManager.Instance.showScore)
+                    scoreNotificationAnim.SetTrigger("Up");
                 GameManager.Instance.correctAnswers++;
                 scoreNotification.text = "<size=+20>" + "<color=green>+1";
                 GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - startTime, numberAText.text + opClean + numberBText.text + " = " + entResult, true, true, behind, eIDs, eScores));
@@ -330,7 +335,8 @@ public class GameLogic : MonoBehaviour {
             else
             {
                 audioSource.clip = negativ;
-                scoreNotificationAnim.SetTrigger("Down");
+                if (GameManager.Instance.showScore)
+                    scoreNotificationAnim.SetTrigger("Down");
                 GameManager.Instance.wrongAnswers++;
                 scoreNotification.text = "<size=+20>" + "<color=red>-1";
                 GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - startTime, numberAText.text + opClean + numberBText.text + " = " + entResult, true, false, behind, eIDs, eScores));
@@ -339,7 +345,8 @@ public class GameLogic : MonoBehaviour {
         else
         {
             audioSource.clip = drop;
-            scoreNotificationAnim.SetTrigger("N");
+            if (GameManager.Instance.showScore)
+                scoreNotificationAnim.SetTrigger("N");
             GameManager.Instance.skippedAnswers++;
             scoreNotification.text = "<size=+20>" + "+0";
             GameManager.Instance.ownParticipant.tasks.Add(new TaskData(timeTask - startTime, Time.time - startTime, numberAText.text + opClean + numberBText.text + " = N.A.", false, false, behind, eIDs, eScores));
@@ -351,7 +358,8 @@ public class GameLogic : MonoBehaviour {
     IEnumerator TaskExit()
     {
         yield return new WaitForSeconds(0.6f);
-        audioSource.Play();
+        if (GameManager.Instance.showScore)
+            audioSource.Play();
         int r = Random.Range(0, exitClip.Length);
         anim.SetTrigger(exitClip[r].name);
         yield return new WaitForSeconds(exitClip[r].length);

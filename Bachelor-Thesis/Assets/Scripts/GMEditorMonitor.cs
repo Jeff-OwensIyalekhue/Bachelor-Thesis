@@ -6,9 +6,10 @@ public class GMEditorMonitor : MonoBehaviour {
 
     [SerializeField]
     List<NetworkObject> playerList = GameManager.Instance.playerList;
-    public string path = GameManager.Instance.pathToSaveLocation;
+    //public string path = GameManager.Instance.pathToSaveLocation;
     public int turn = GameManager.Instance.currentParticipantTurn;
-  
+    //public List<int[][]> turns = GameManager.Instance.generatedTasks.turns;
+
     #region Singleton
     public static GMEditorMonitor Instance;
 
