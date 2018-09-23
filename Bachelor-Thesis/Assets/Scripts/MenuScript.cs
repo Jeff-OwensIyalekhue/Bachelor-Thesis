@@ -37,10 +37,8 @@ public class MenuScript : MonoBehaviour {
     {
         GameManager.Instance.LoadOptions();
 
-        if (!Directory.Exists(GameManager.Instance.pathToSaveLocation))
-            GameManager.Instance.pathToSaveLocation = Application.persistentDataPath;
-
-        GameManager.Instance.LoadGeneratedTasks();
+        if (Directory.Exists(GameManager.Instance.pathToSaveLocation))
+            GameManager.Instance.LoadGeneratedTasks();
     }
 
     // Use this for initialization

@@ -135,6 +135,7 @@ public class NetworkSync : NetworkBehaviour {
     }
     IEnumerator EndTransition()
     {
+        AsyncOperation async;
         //Debug.Log("begin transition");
         //Debug.Break();
         endTransition = false;
@@ -143,22 +144,29 @@ public class NetworkSync : NetworkBehaviour {
         yield return new WaitForSeconds((clip.length / 2) + 1);
         //Debug.Log("before scene change");
         //Debug.Break();
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(0);
+        async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(0);
         //if (isServer)
         //    networkManager.ServerChangeScene("Menu");
-        yield return new WaitForSeconds((clip.length / 2) - 1);
+        yield return new WaitUntil(() => async.isDone);
+        anim.SetTrigger("End");
+        yield return new WaitUntil(() => anim.IsInTransition(0));
         canvas.sortingOrder = -1;
     }
     IEnumerator StartTransition()
     {
+        //Debug.Break();
+        AsyncOperation async;
         startTransition = true;
         canvas.sortingOrder = 2;
         anim.SetTrigger("Start");
         yield return new WaitForSeconds((clip.length / 2) + 1);
         GameManager.Instance.everybodyReady = true;
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(1);
+        async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(1);
+        yield return new WaitUntil(() => async.isDone);
+        anim.SetTrigger("End");
+        yield return new WaitUntil(() => anim.IsInTransition(0));
         GameManager.Instance.preGameRunning = true;
-        yield return new WaitForSeconds((clip.length / 2) - 1);
+        //yield return new WaitForSeconds((clip.length / 2) - 1);
         canvas.sortingOrder = -1;
         startTransition = false;
     }
