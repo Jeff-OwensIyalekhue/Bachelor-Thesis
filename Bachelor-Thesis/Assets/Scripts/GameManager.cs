@@ -294,7 +294,7 @@ public class GameManager{
         if (Directory.Exists(pathToSaveLocation))
         {
             BinaryFormatter bF = new BinaryFormatter();
-            FileStream file = File.Create(pathToSaveLocation + "/options.dat");
+            FileStream file = File.Create(Application.persistentDataPath + "options.dat");
 
             OptionsData data = new OptionsData(intervalMin, intervalMax, turnsToPlay, taskPerTurn, randomTasks, showScore, showTimer, timeLimit, pathToSaveLocation, musicVolume, sfxVolume);
         
@@ -304,10 +304,10 @@ public class GameManager{
     }
     public void LoadOptions()
     {
-        if (File.Exists(pathToSaveLocation + "/options.dat"))
+        if (File.Exists(Application.persistentDataPath + "options.dat"))
         {
             BinaryFormatter bF = new BinaryFormatter();
-            FileStream file = File.Open(pathToSaveLocation + "/options.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + "options.dat", FileMode.Open);
             OptionsData data = (OptionsData)bF.Deserialize(file);
             file.Close();
 
