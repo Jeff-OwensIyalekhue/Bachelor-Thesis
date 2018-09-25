@@ -30,6 +30,7 @@ public class MenuScript : MonoBehaviour {
     public TMP_Text generateTasksText;
     public TMP_Text randomTaskText;
     public TMP_Text showScoreText;
+    public TMP_Text supervisorText;
 
     NetworkManager networkManager;
 
@@ -76,6 +77,11 @@ public class MenuScript : MonoBehaviour {
         if (!GameManager.Instance.randomTasks && randomTaskText.text != "<s>random task")
             randomTaskText.text = "<s>random task";
 
+        if (GameManager.Instance.supervisor && supervisorText.text != "Supervisor")
+            supervisorText.text = "Supervisor";
+        if (!GameManager.Instance.supervisor && supervisorText.text != "<s>Supervisor")
+            supervisorText.text = "<s>Supervisor";
+
         if (savePathInputFieldPlaceholderText.text != GameManager.Instance.pathToSaveLocation && savePathInputFieldPlaceholderText.text != "error")
             savePathInputFieldPlaceholderText.text = GameManager.Instance.pathToSaveLocation;
 
@@ -90,8 +96,14 @@ public class MenuScript : MonoBehaviour {
         if (GameManager.Instance.isHost && !dropdown.interactable)
             dropdown.interactable = true;
     }
-    
+
     #region Set Options
+
+    public void SetSupervisor()
+    {
+        GameManager.Instance.supervisor = !GameManager.Instance.supervisor;
+    }
+
     public void SetSavePath(string path)
     {
         if (path.Length == 0)

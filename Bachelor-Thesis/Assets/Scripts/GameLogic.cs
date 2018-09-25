@@ -15,6 +15,7 @@ public class GameLogic : MonoBehaviour {
     public TMP_Text numberBText;
     public TMP_InputField inputField;
     EventSystem eventSystem;
+    public TMP_Text inputFieldPlaceholder;
 
     [Header("Score UI")]
     public TMP_Text score;
@@ -58,6 +59,8 @@ public class GameLogic : MonoBehaviour {
         //int r = Random.Range(0, 100);
         GameManager.Instance.ownParticipant = new ParticipantData(GameManager.Instance.gameMode, System.DateTime.Now);
         eventSystem = FindObjectOfType<EventSystem>();
+        if (!GameManager.Instance.supervisor)
+            inputFieldPlaceholder.text = "";
     }
 	
 	// Update is called once per frame
@@ -275,7 +278,10 @@ public class GameLogic : MonoBehaviour {
                 Debug.Log("unexpected value as operaor");
                 break;
         }
-
+        if (GameManager.Instance.supervisor)
+        {
+            //inputFieldPlaceholder.text = "" + expResult;
+        }
         //int r = Random.Range(0, entryClip.Length);
 
         //anim.SetTrigger(entryClip[r].name);

@@ -33,6 +33,8 @@ public class GameManager{
     #endregion
 
     #region setting vars
+    public bool supervisor = false;
+
     public bool randomTasks = false;
     public int taskPerTurn = 200;
     public int turnsToPlay = 4;

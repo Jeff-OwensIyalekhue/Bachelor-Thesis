@@ -148,30 +148,43 @@ public class NetworkObject : NetworkBehaviour {
 
     IEnumerator FakePlayerBehavior()
     {
+        int factor = Random.Range(0, 1);
         float r = 0;
+        float boost = 0;
         while (GameManager.Instance.gameRunning)
         {
-            yield return new WaitForSeconds(6);
+            r = Random.Range(2f, 6f);
+            yield return new WaitForSeconds(r);
 
             r = Random.Range(0f, 1f);
             if (score < GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
             {
-                if (r <= 0.7)
+                if (score + 3 + factor < GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
+                    boost = 0.04f;
+                else
+                    boost = 0;
+
+                if (r <= 0.7 + (boost * 4))
                 {
                     score++;
                 }
-                else if (r > 0.95)
+                else if (r > 0.95 + boost)
                 {
                     score--;
                 }
             }
             else
             {
-                if (r <= 0.5)
+                if (score - 3 - factor >= GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers)
+                    boost = 0.04f;
+                else
+                    boost = 0;
+
+                if (r <= 0.5 - boost)
                 {
                     score++;
                 }
-                else if (r > 0.9)
+                else if (r > 0.9 - boost)
                 {
                     score--;
                 }
