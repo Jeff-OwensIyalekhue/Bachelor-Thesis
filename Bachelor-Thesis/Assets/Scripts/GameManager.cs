@@ -52,7 +52,7 @@ public class GameManager{
 
     public int currentParticipantTurn = 0;                  // how many scenearios did he play
     public int currentParticipantID = 1;
-    public string currentParticipantGender  = "n.a.";
+    public string currentParticipantGender  = "No Answer";
     #endregion
     #region status vars
     public ParticipantData ownParticipant;
@@ -129,8 +129,8 @@ public class GameManager{
     {
 
         string pathFolder = pathToSaveLocation + "Session_"
-                            + DateTime.Today.ToString("dd-M-yyyy/") + participant.startTime.ToString("hh-mmtt/")
-                            + "Participant" + participant.identification;
+                            + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
+                            + participant.startTime.ToString("/hh-mmtt");
 
         try
         {
@@ -140,8 +140,8 @@ public class GameManager{
             {
                 i++;
                 pathFolder = pathToSaveLocation + "Session_"
-                            + DateTime.Today.ToString("dd-M-yyyy/") + participant.startTime.ToString("hh-mmtt/")
-                            + "Particpant" + participant.identification + "(" + i + ")";                
+                            + DateTime.Today.ToString("dd-M-yyyy/") + "Particpant" + participant.identification
+                            + participant.startTime.ToString("/hh-mmtt") + "(" + i + ")";                
             }
 
             // Try to create the directory.
@@ -160,7 +160,7 @@ public class GameManager{
 
         // Creating a human readable .txt file of particpant data
         //Debug.Log("create user data");
-        string path = pathFolder + "/Participant" + participant.identification + "_HR.txt";
+        string path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".txt";
         
         using(StreamWriter file = new StreamWriter(path, true))
         {
@@ -225,7 +225,7 @@ public class GameManager{
 
         }
 
-        using (StreamWriter fileCSV = new StreamWriter(pathFolder + "/Particpant" + participant.identification + ".csv", true))
+        using (StreamWriter fileCSV = new StreamWriter(pathFolder + "/Particpant" + participant.identification + "_Turn" + currentParticipantTurn + ".csv", true))
         {
             fileCSV.WriteLine("Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point");
             string line = "";

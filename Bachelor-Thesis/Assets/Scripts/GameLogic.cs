@@ -275,7 +275,7 @@ public class GameLogic : MonoBehaviour {
                 opClean = " * ";
                 break;
             default:
-                Debug.Log("unexpected value as operaor");
+                Debug.Log("unexpected value as operator");
                 break;
         }
         if (GameManager.Instance.supervisor)
