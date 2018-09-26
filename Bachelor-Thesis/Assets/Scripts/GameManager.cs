@@ -140,7 +140,7 @@ public class GameManager{
             {
                 i++;
                 pathFolder = pathToSaveLocation + "Session_"
-                            + DateTime.Today.ToString("dd-M-yyyy/") + "Particpant" + participant.identification
+                            + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
                             + participant.startTime.ToString("/hh-mmtt") + "(" + i + ")";                
             }
 
@@ -161,8 +161,13 @@ public class GameManager{
         // Creating a human readable .txt file of particpant data
         //Debug.Log("create user data");
         string path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".txt";
-        
-        using(StreamWriter file = new StreamWriter(path, true))
+        int x = 0;
+        while (File.Exists(path))
+        {
+            x++;
+            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".txt";
+        }
+        using (StreamWriter file = new StreamWriter(path, true))
         {
             file.WriteLine(DateTime.Today.ToString("D") + ", " + participant.startTime.ToString("h:mm:ss tt"));
 
@@ -225,7 +230,14 @@ public class GameManager{
 
         }
 
-        using (StreamWriter fileCSV = new StreamWriter(pathFolder + "/Particpant" + participant.identification + "_Turn" + currentParticipantTurn + ".csv", true))
+        path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".csv";
+        x = 0;
+        while (File.Exists(path))
+        {
+            x++;
+            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".csv";
+        }
+        using (StreamWriter fileCSV = new StreamWriter(path, true))
         {
             fileCSV.WriteLine("Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point");
             string line = "";
@@ -281,7 +293,14 @@ public class GameManager{
 
         // Creating a serialized file of particpant data
         BinaryFormatter bF = new BinaryFormatter();
-        FileStream fileB = File.Create(pathFolder + "/Particpant" + participant.identification + "_NHR.dat");
+        path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "_NHR.dat";
+        x = 0;
+        while (File.Exists(path))
+        {
+            x++;
+            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + "_NHR.dat";
+        }
+        FileStream fileB = File.Create(path);
 
         ParticipantData data = participant;
 
