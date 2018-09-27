@@ -127,10 +127,19 @@ public class GameManager{
 
     public void CreateUserData(ParticipantData participant)
     {
-
-        string pathFolder = pathToSaveLocation + "Session_"
-                            + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
-                            + participant.startTime.ToString("/hh-mmtt");
+        string pathFolder;
+        if (supervisor) 
+        {
+            pathFolder = pathToSaveLocation + "Session_"
+                                + DateTime.Today.ToString("dd-M-yyyy/") + "Supervisor_Participant" + participant.identification
+                                + participant.startTime.ToString("/hh-mmtt");
+        }
+        else
+        {
+            pathFolder = pathToSaveLocation + "Session_"
+                                + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
+                                + participant.startTime.ToString("/hh-mmtt");
+        }
 
         try
         {
@@ -139,9 +148,18 @@ public class GameManager{
             while (Directory.Exists(pathFolder))
             {
                 i++;
-                pathFolder = pathToSaveLocation + "Session_"
-                            + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
-                            + participant.startTime.ToString("/hh-mmtt") + "(" + i + ")";                
+                if (supervisor)
+                {
+                    pathFolder = pathToSaveLocation + "Session_"
+                                        + DateTime.Today.ToString("dd-M-yyyy/") + "Supervisor_Participant" + participant.identification
+                                        + participant.startTime.ToString("/hh-mmtt") + "(" + i + ")";
+                }
+                else
+                {
+                    pathFolder = pathToSaveLocation + "Session_"
+                                        + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
+                                        + participant.startTime.ToString("/hh-mmtt") + "(" + i + ")";
+                }               
             }
 
             // Try to create the directory.
@@ -160,18 +178,40 @@ public class GameManager{
 
         // Creating a human readable .txt file of particpant data
         //Debug.Log("create user data");
-        string path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".txt";
+        string path;
+
+        if (supervisor)
+        {
+            path = pathFolder + "/Supervisor_Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".txt";
+        }
+        else
+        {
+            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".txt";
+        }
         int x = 0;
         while (File.Exists(path))
         {
             x++;
-            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".txt";
+            if (supervisor)
+            {
+                path = pathFolder + "/Supervisor_Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".txt";
+            }
+            else
+            {
+                path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".txt";
+            }
         }
         using (StreamWriter file = new StreamWriter(path, true))
         {
             file.WriteLine(DateTime.Today.ToString("D") + ", " + participant.startTime.ToString("h:mm:ss tt"));
-
-            file.WriteLine("Participant " + participant.identification);
+            if (supervisor)
+            {
+                file.WriteLine("Supervisor_Participant " + participant.identification);
+            }
+            else
+            {
+                file.WriteLine("Participant " + participant.identification);
+            }
             file.WriteLine("Gender:  " + participant.gender);
             file.WriteLine("" + currentParticipantTurn + ". Turn");
             file.WriteLine("Player " + participant.connectionID);
@@ -230,16 +270,30 @@ public class GameManager{
 
         }
 
-        path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".csv";
+        if (supervisor)
+        {
+            path = pathFolder + "/Supervisor_Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".csv";
+        }
+        else
+        {
+            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + ".csv";
+        }
         x = 0;
         while (File.Exists(path))
         {
             x++;
-            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".csv";
+            if (supervisor)
+            {
+                path = pathFolder + "/Supervisor_Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".csv";
+            }
+            else
+            {
+                path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + ".csv";
+            }
         }
         using (StreamWriter fileCSV = new StreamWriter(path, true))
         {
-            fileCSV.WriteLine("Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point");
+            fileCSV.WriteLine("Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point;Supervisor");
             string line = "";
             foreach (TaskData task in participant.tasks)
             {
@@ -286,6 +340,7 @@ public class GameManager{
                 {
                     line += "0";
                 }
+                line += ";" + supervisor;
                 fileCSV.WriteLine(line);
                 line = "";
             }
@@ -293,12 +348,26 @@ public class GameManager{
 
         // Creating a serialized file of particpant data
         BinaryFormatter bF = new BinaryFormatter();
-        path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "_NHR.dat";
+        if (supervisor)
+        {
+            path = pathFolder + "/Supervisor_Participant" + participant.identification + "_Turn" + currentParticipantTurn + "_NHR.dat";
+        }
+        else
+        {
+            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "_NHR.dat";
+        }
         x = 0;
         while (File.Exists(path))
         {
             x++;
-            path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + "_NHR.dat";
+            if (supervisor)
+            {
+                path = pathFolder + "/Supervisor_Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + "_NHR.dat";
+            }
+            else
+            {
+                path = pathFolder + "/Participant" + participant.identification + "_Turn" + currentParticipantTurn + "(" + x + ")" + "_NHR.dat";
+            }
         }
         FileStream fileB = File.Create(path);
 

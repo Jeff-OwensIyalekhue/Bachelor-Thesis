@@ -326,7 +326,7 @@ public class GameLogic : MonoBehaviour {
         }
 
 
-        if (inputField.text.Length != 0)   
+        if (inputField.text.Length != 0 && inputField.text != "-")
         {
             entResult = int.Parse(inputField.text);
             if (entResult == expResult)
