@@ -125,42 +125,60 @@ public class GameManager{
         }
     }
 
+    public bool CheckParticipantID()
+    {
+        string pathFolder;
+        if (supervisor)
+        {
+            pathFolder = pathToSaveLocation + /*"Session_"
+                                + DateTime.Today.ToString("dd-M-yyyy/") + */"Supervisor_Participant" + currentParticipantID
+                                /*+ participant.startTime.ToString("/hh-mmtt")*/;
+        }
+        else
+        {
+            pathFolder = pathToSaveLocation + /*"Session_"
+                                + DateTime.Today.ToString("dd-M-yyyy/") + */"Participant" + currentParticipantID
+                                /*+ participant.startTime.ToString("/hh-mmtt")*/;
+        }
+
+        return Directory.Exists(pathFolder);
+    }
     public void CreateUserData(ParticipantData participant)
     {
         string pathFolder;
         if (supervisor) 
         {
-            pathFolder = pathToSaveLocation + "Session_"
-                                + DateTime.Today.ToString("dd-M-yyyy/") + "Supervisor_Participant" + participant.identification
-                                + participant.startTime.ToString("/hh-mmtt");
+            pathFolder = pathToSaveLocation + /*"Session_"
+                                + DateTime.Today.ToString("dd-M-yyyy/") + */"Supervisor_Participant" + participant.identification
+                                /*+ participant.startTime.ToString("/hh-mmtt")*/;
         }
         else
         {
-            pathFolder = pathToSaveLocation + "Session_"
-                                + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
-                                + participant.startTime.ToString("/hh-mmtt");
+            pathFolder = pathToSaveLocation + /*"Session_"
+                                + DateTime.Today.ToString("dd-M-yyyy/") + */"Participant" + participant.identification
+                                /*+ participant.startTime.ToString("/hh-mmtt")*/;
         }
 
         try
         {
             // Determine whether the directory exists.
-            int i = 0;
-            while (Directory.Exists(pathFolder))
-            {
-                i++;
-                if (supervisor)
-                {
-                    pathFolder = pathToSaveLocation + "Session_"
-                                        + DateTime.Today.ToString("dd-M-yyyy/") + "Supervisor_Participant" + participant.identification
-                                        + participant.startTime.ToString("/hh-mmtt") + "(" + i + ")";
-                }
-                else
-                {
-                    pathFolder = pathToSaveLocation + "Session_"
-                                        + DateTime.Today.ToString("dd-M-yyyy/") + "Participant" + participant.identification
-                                        + participant.startTime.ToString("/hh-mmtt") + "(" + i + ")";
-                }               
-            }
+            //int i = 0;
+            //while (Directory.Exists(pathFolder))
+            //{
+            //    i++;
+            //    if (supervisor)
+            //    {
+            //        pathFolder = pathToSaveLocation + /*"Session_"
+            //                            + DateTime.Today.ToString("dd-M-yyyy/") + */"Supervisor_Participant" + participant.identification
+            //                            /*+ participant.startTime.ToString("/hh-mmtt") */+ "(" + i + ")";
+            //    }
+            //    else
+            //    {
+            //        pathFolder = pathToSaveLocation + /*"Session_"
+            //                            + DateTime.Today.ToString("dd-M-yyyy/") + */"Participant" + participant.identification
+            //                            /*+ participant.startTime.ToString("/hh-mmtt") */+ "(" + i + ")";
+            //    }               
+            //}
 
             // Try to create the directory.
             Directory.CreateDirectory(pathFolder);

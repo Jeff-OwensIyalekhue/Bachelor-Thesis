@@ -153,7 +153,7 @@ public class NetworkObject : NetworkBehaviour {
         float boost = 0;
         while (GameManager.Instance.gameRunning)
         {
-            r = Random.Range(2f, 6f);
+            r = Random.Range(1.11f, 2.49f + (2.49f - 1.11f));
             yield return new WaitForSeconds(r);
 
             r = Random.Range(0f, 1f);

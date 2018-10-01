@@ -49,6 +49,7 @@ public class MenuScript : MonoBehaviour {
         musicVolBar.value = GameManager.Instance.musicVolume;
         sfxVolBar.value = GameManager.Instance.sfxVolume;
 
+
         idText.text = "" + GameManager.Instance.currentParticipantID;
         gText.text = GameManager.Instance.currentParticipantGender;
         turnText.text = "" + GameManager.Instance.currentParticipantTurn;
@@ -200,6 +201,10 @@ public class MenuScript : MonoBehaviour {
         if (s.Length == 0)
             return;
         GameManager.Instance.currentParticipantID = int.Parse(s);
+        while(GameManager.Instance.currentParticipantID <= 0 || GameManager.Instance.CheckParticipantID())
+        {
+            GameManager.Instance.currentParticipantID++;
+        }
         idText.text = "" + GameManager.Instance.currentParticipantID;
     }
 

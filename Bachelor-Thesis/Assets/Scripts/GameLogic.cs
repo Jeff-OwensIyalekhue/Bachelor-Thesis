@@ -280,7 +280,7 @@ public class GameLogic : MonoBehaviour {
         }
         if (GameManager.Instance.supervisor)
         {
-            //inputFieldPlaceholder.text = "" + expResult;
+            inputFieldPlaceholder.text = "" + expResult;
         }
         //int r = Random.Range(0, entryClip.Length);
 
