@@ -35,7 +35,13 @@ public class GameLogic : MonoBehaviour {
     public AnimationClip[] entryClip;
     public AnimationClip[] exitClip;
     bool transition = false;
-    
+
+    #region supervisor
+    string solString;
+    char[] solChar;
+    int solIter = 0;
+    #endregion
+
     int ranking = 0;
     int taskIteration = 0;
 
@@ -61,6 +67,10 @@ public class GameLogic : MonoBehaviour {
         eventSystem = FindObjectOfType<EventSystem>();
         if (!GameManager.Instance.supervisor)
             inputFieldPlaceholder.text = "";
+        else
+        {
+            inputField.interactable = false;
+        }
     }
 	
 	// Update is called once per frame
@@ -124,6 +134,22 @@ public class GameLogic : MonoBehaviour {
             // display the remaining time if a time limit is set
             if (GameManager.Instance.timeLimit > 0 && GameManager.Instance.showTimer && (GameManager.Instance.timeLimit + timeStart - Time.time) >= 0)
                 timer.text = (GameManager.Instance.timeLimit + timeStart - Time.time).ToString("N0");
+
+            if (GameManager.Instance.supervisor)
+            {
+                if (Input.anyKeyDown)
+                {
+                    if(solIter < solChar.Length)
+                    {
+                        inputField.text += solChar[solIter];
+                        solIter++;
+                    }
+                    else
+                    {
+                        Solve();
+                    }
+                }
+            }
 
         // checks if new task should be asked
             if (answered)
@@ -281,6 +307,9 @@ public class GameLogic : MonoBehaviour {
         if (GameManager.Instance.supervisor)
         {
             inputFieldPlaceholder.text = "" + expResult;
+            solString = "" + expResult;
+            solChar = solString.ToCharArray();
+            solIter = 0;
         }
         //int r = Random.Range(0, entryClip.Length);
 
@@ -324,8 +353,7 @@ public class GameLogic : MonoBehaviour {
                     behind = true;
             }
         }
-
-
+        
         if (inputField.text.Length != 0 && inputField.text != "-")
         {
             entResult = int.Parse(inputField.text);
