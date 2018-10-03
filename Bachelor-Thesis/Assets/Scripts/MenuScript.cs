@@ -103,6 +103,8 @@ public class MenuScript : MonoBehaviour {
     public void SetSupervisor()
     {
         GameManager.Instance.supervisor = !GameManager.Instance.supervisor;
+        GameManager.Instance.playerList[GameManager.Instance.ownConnectionID].scriptedPlayer =
+            !GameManager.Instance.playerList[GameManager.Instance.ownConnectionID].scriptedPlayer;
     }
 
     public void SetSavePath(string path)

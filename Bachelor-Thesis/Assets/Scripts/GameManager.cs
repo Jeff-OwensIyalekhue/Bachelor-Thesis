@@ -62,7 +62,7 @@ public class GameManager{
     public int wrongAnswers = 0;
     public int skippedAnswers = 0;
 
-    public int gameMode = 0;                                // 0:= SinglePlayer; 1:= HalbCoop; 2:= Versus; 3:= Party; 4:= Collab
+    public int gameMode = 0;                                // 0:= Singleplayer; 1:= HalbCoop; 2:= Versus; 3:= Party; 4:= Collab
     public int nGameMode = -1;
     public int ownConnectionID = 0;
 
@@ -311,10 +311,12 @@ public class GameManager{
         }
         using (StreamWriter fileCSV = new StreamWriter(path, true))
         {
-            fileCSV.WriteLine("Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point;Supervisor");
+            fileCSV.WriteLine("Task ID;Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point;Supervisor");
             string line = "";
+            int i = 0;
             foreach (TaskData task in participant.tasks)
             {
+                line += "" + i++;
                 line += participant.identification + ";";
                 line += participant.gender + ";";
                 line += currentParticipantTurn + ";";

@@ -26,7 +26,7 @@ public class GameLogic : MonoBehaviour {
     public Animator scoreNotificationAnim;
     public Animator scoreBoardAnim;
     public AudioSource audioSource;
-    public AudioClip positv;
+    public AudioClip positive;
     public AudioClip negativ;
     public AudioClip drop;
 
@@ -34,7 +34,7 @@ public class GameLogic : MonoBehaviour {
     public Animator anim;
     public AnimationClip[] entryClip;
     public AnimationClip[] exitClip;
-    bool transition = false;
+    public static bool transition = false;
 
     #region supervisor
     string solString;
@@ -59,6 +59,8 @@ public class GameLogic : MonoBehaviour {
     bool answered = true;
     float timeStart;                // start time of the  game after the start countdown
     #endregion
+
+    static bool scriptedSolution;
 
     // Use this for initialization
     void Awake () {
@@ -86,9 +88,13 @@ public class GameLogic : MonoBehaviour {
             return;
 
         // if there is no time limit, end the game when escape is pressed
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Escape) && GameManager.Instance.gameRunning)
         {
             GameManager.Instance.gameRunning = false;
+            inputField.DeactivateInputField();
+            timer.text = "end";
+            if (!GameManager.Instance.showTimer)
+                timer.gameObject.SetActive(true);
 
             // Enter participant information
             GameManager.Instance.ownParticipant.correctAnswers = GameManager.Instance.correctAnswers;
@@ -97,13 +103,7 @@ public class GameLogic : MonoBehaviour {
             GameManager.Instance.ownParticipant.timePlayed = Time.time - timeStart;
 
             GameManager.Instance.CreateUserData(GameManager.Instance.ownParticipant);
-
-            // Reset GameManager Data
-            GameManager.Instance.correctAnswers = 0;
-            GameManager.Instance.wrongAnswers = 0;
-            GameManager.Instance.skippedAnswers = 0;
-            //GameManager.Instance.enemyScore = 0;
-
+            
             NetworkSync.Load();
         }
         if (GameManager.Instance.gameRunning)
@@ -114,6 +114,8 @@ public class GameLogic : MonoBehaviour {
                 GameManager.Instance.gameRunning = false;
                 inputField.DeactivateInputField();
                 timer.text = "end";
+                if (!GameManager.Instance.showTimer)
+                    timer.gameObject.SetActive(true);
 
                 // Enter participant information
                 GameManager.Instance.ownParticipant.correctAnswers = GameManager.Instance.correctAnswers;
@@ -121,12 +123,6 @@ public class GameLogic : MonoBehaviour {
                 GameManager.Instance.ownParticipant.skippedTasks = GameManager.Instance.skippedAnswers;
                 GameManager.Instance.ownParticipant.timePlayed = Time.time - timeStart;
                 GameManager.Instance.CreateUserData(GameManager.Instance.ownParticipant);
-
-                // Reset GameManager Data
-                GameManager.Instance.correctAnswers = 0;
-                GameManager.Instance.wrongAnswers = 0;
-                GameManager.Instance.skippedAnswers = 0;
-                //GameManager.Instance.enemyScore = 0;
 
                 NetworkSync.Load();
             }
@@ -137,18 +133,21 @@ public class GameLogic : MonoBehaviour {
 
             if (GameManager.Instance.supervisor)
             {
-                if (Input.anyKeyDown)
+                if (Input.anyKeyDown && !scriptedSolution)
                 {
                     if(solIter < solChar.Length)
                     {
                         inputField.text += solChar[solIter];
                         solIter++;
                     }
-                    else
-                    {
-                        Solve();
-                    }
                 }
+                if (scriptedSolution)
+                {
+                    scriptedSolution = false;
+                    inputField.text = "" + expResult;
+                    Solve();
+                }
+
             }
 
         // checks if new task should be asked
@@ -255,6 +254,11 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
+    public static void ScriptSolve()
+    {
+        scriptedSolution = true;
+    }
+
     // Sets a new task up
     void Task()
     {
@@ -359,7 +363,7 @@ public class GameLogic : MonoBehaviour {
             entResult = int.Parse(inputField.text);
             if (entResult == expResult)
             {
-                audioSource.clip = positv;
+                audioSource.clip = positive;
                 if(GameManager.Instance.showScore)
                     scoreNotificationAnim.SetTrigger("Up");
                 GameManager.Instance.correctAnswers++;

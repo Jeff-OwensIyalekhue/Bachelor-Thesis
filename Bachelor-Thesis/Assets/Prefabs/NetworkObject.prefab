@@ -85,6 +85,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fakePlayer: 0
+  scriptedPlayer: 0
+  halbcoopScript: []
+  versusScript: []
+  partyScript: []
   score: 0
   connectionID: -1
   clientReady: 0
+  timeLimit: 0
+  gameMode: 0

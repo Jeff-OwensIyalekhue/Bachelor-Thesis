@@ -22,17 +22,18 @@ public class NetworkSync : NetworkBehaviour {
     #endregion
 
     NetworkManager networkManager;
-
-    bool startTransition = false;
-    static bool endTransition = false;
-
+    [Header("FakePlayer")]
     bool fakeOpponent = false;
     public GameObject fakeEnemyPrefab;
+    public int fakeEnemyAmount = 3;
 
     [Header("Scene Blackscreen Fade")]
     public Canvas canvas;
     public Animator anim;
     public AnimationClip clip;
+
+    bool startTransition = false;
+    static bool endTransition = false;
 
     // Use this for initialization
     void Start () {
@@ -53,14 +54,14 @@ public class NetworkSync : NetworkBehaviour {
                 }
             }
         }
-        if (GameManager.Instance.playerList.Count < 4 && GameManager.Instance.isHost)
+        if (GameManager.Instance.playerList.Count <= fakeEnemyAmount && GameManager.Instance.isHost)
         {
             if (GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 3)
             {
                 if (!fakeOpponent)
                 {
                     fakeOpponent = true;
-                    StartCoroutine(FakePlayer(4 - GameManager.Instance.playerList.Count));
+                    StartCoroutine(FakePlayer(1 + fakeEnemyAmount - GameManager.Instance.playerList.Count));
                 }
             }
         }
@@ -104,7 +105,10 @@ public class NetworkSync : NetworkBehaviour {
         }
 
         if (endTransition)
+        {
+            endTransition = false;
             StartCoroutine(EndTransition());
+        }
     }
 
     IEnumerator FakePlayer(int i)
@@ -135,6 +139,14 @@ public class NetworkSync : NetworkBehaviour {
     }
     IEnumerator EndTransition()
     {
+        yield return new WaitForSeconds(2);
+
+        // Reset GameManager Data
+        GameManager.Instance.correctAnswers = 0;
+        GameManager.Instance.wrongAnswers = 0;
+        GameManager.Instance.skippedAnswers = 0;
+        //GameManager.Instance.enemyScore = 0;
+
         AsyncOperation async;
         //Debug.Log("begin transition");
         //Debug.Break();

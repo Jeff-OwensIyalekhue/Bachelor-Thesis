@@ -1382,7 +1382,7 @@ MonoBehaviour:
   scoreNotificationAnim: {fileID: 2078282935}
   scoreBoardAnim: {fileID: 411511653}
   audioSource: {fileID: 2078282938}
-  positv: {fileID: 8300000, guid: b882b5a36f82a714b958b819c38b0695, type: 3}
+  positive: {fileID: 8300000, guid: b882b5a36f82a714b958b819c38b0695, type: 3}
   negativ: {fileID: 8300000, guid: 0abaa523f5679b346bd6f9870d82bc6c, type: 3}
   drop: {fileID: 8300000, guid: 76f3b9d643f91d2429d3d7abe546975d, type: 3}
   anim: {fileID: 628194906}
