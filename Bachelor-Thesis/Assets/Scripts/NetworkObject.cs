@@ -105,7 +105,7 @@ public class NetworkObject : NetworkBehaviour {
                 if (!scriptRunning && scriptedPlayer)
                     StartCoroutine(ScriptedPlayerBehavior());
 
-                if (this.score != GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers || fakePlayer)
+                if (this.score != GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers || (fakePlayer && score != GameManager.Instance.playerList[connectionID].score))
                 {
                     CmdScoreUpdate(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers);
                 }
@@ -228,6 +228,7 @@ public class NetworkObject : NetworkBehaviour {
                         yield return new WaitWhile(() => GameLogic.transition);
                         //Debug.Log("task readable");
                         yield return new WaitForSeconds(1.5f);
+                        GameLogic.SolveCountdown(time + Time.time);
                         yield return new WaitForSeconds(time);
                         if (GameManager.Instance.supervisor)
                         {
@@ -244,6 +245,7 @@ public class NetworkObject : NetworkBehaviour {
                     {
                         yield return new WaitWhile(() => GameLogic.transition);
                         yield return new WaitForSeconds(1.5f);
+                        GameLogic.SolveCountdown(time + Time.time);
                         yield return new WaitForSeconds(time);
                         if (GameManager.Instance.supervisor)
                         {
@@ -260,6 +262,7 @@ public class NetworkObject : NetworkBehaviour {
                     {
                         yield return new WaitWhile(() => GameLogic.transition);
                         yield return new WaitForSeconds(1.5f);
+                        GameLogic.SolveCountdown(time + Time.time);
                         yield return new WaitForSeconds(time);
                         if (GameManager.Instance.supervisor)
                         {
@@ -276,6 +279,7 @@ public class NetworkObject : NetworkBehaviour {
                     {
                         yield return new WaitWhile(() => GameLogic.transition);
                         yield return new WaitForSeconds(1.5f);
+                        GameLogic.SolveCountdown(time + Time.time);
                         yield return new WaitForSeconds(time);
                         if (GameManager.Instance.supervisor)
                         {
@@ -292,6 +296,7 @@ public class NetworkObject : NetworkBehaviour {
                     {
                         yield return new WaitWhile(() => GameLogic.transition);
                         yield return new WaitForSeconds(1.5f);
+                        GameLogic.SolveCountdown(time + Time.time);
                         yield return new WaitForSeconds(time);
                         if (GameManager.Instance.supervisor)
                         {

@@ -16,6 +16,9 @@ public class GameLogic : MonoBehaviour {
     public TMP_InputField inputField;
     EventSystem eventSystem;
     public TMP_Text inputFieldPlaceholder;
+    public TMP_Text supervisorNotification;
+    static float autoSolveCountdown;
+
 
     [Header("Score UI")]
     public TMP_Text score;
@@ -91,8 +94,10 @@ public class GameLogic : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.Escape) && GameManager.Instance.gameRunning)
         {
             GameManager.Instance.gameRunning = false;
-            inputField.DeactivateInputField();
-            timer.text = "end";
+            inputField.gameObject.SetActive(false);
+            numberAText.gameObject.SetActive(false);
+            numberBText.gameObject.SetActive(false);
+            opText.text = "<size=+100>end";
             if (!GameManager.Instance.showTimer)
                 timer.gameObject.SetActive(true);
 
@@ -112,8 +117,10 @@ public class GameLogic : MonoBehaviour {
             if (GameManager.Instance.timeLimit > 0 && (GameManager.Instance.timeLimit + timeStart - Time.time) <= 0)
             {
                 GameManager.Instance.gameRunning = false;
-                inputField.DeactivateInputField();
-                timer.text = "end";
+                inputField.gameObject.SetActive(false);
+                numberAText.gameObject.SetActive(false);
+                numberBText.gameObject.SetActive(false);
+                opText.text = "<size=+100>end";
                 if (!GameManager.Instance.showTimer)
                     timer.gameObject.SetActive(true);
 
@@ -133,11 +140,13 @@ public class GameLogic : MonoBehaviour {
 
             if (GameManager.Instance.supervisor)
             {
+                supervisorNotification.text = (autoSolveCountdown - Time.time).ToString("N0");
                 if (Input.anyKeyDown && !scriptedSolution)
                 {
                     if(solIter < solChar.Length)
                     {
-                        inputField.text += solChar[solIter];
+                        if(inputField.text.Length < solIter + 1)
+                            inputField.text += solChar[solIter];
                         solIter++;
                     }
                 }
@@ -258,7 +267,10 @@ public class GameLogic : MonoBehaviour {
     {
         scriptedSolution = true;
     }
-
+    public static void SolveCountdown(float f)
+    {
+        autoSolveCountdown = f;   
+    }
     // Sets a new task up
     void Task()
     {
