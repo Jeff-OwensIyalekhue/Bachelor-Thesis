@@ -319,7 +319,7 @@ public class GameManager{
             int i = 0;
             foreach (TaskData task in participant.tasks)
             {
-                line += "" + i++;
+                line += "" + (i++) + ";";
                 line += participant.identification + ";";
                 line += participant.gender + ";";
                 line += currentParticipantTurn + ";";
