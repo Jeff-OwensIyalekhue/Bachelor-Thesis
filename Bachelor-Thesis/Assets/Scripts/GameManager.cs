@@ -62,7 +62,7 @@ public class GameManager{
     public int wrongAnswers = 0;
     public int skippedAnswers = 0;
 
-    public int gameMode = 0;                                // 0:= Singleplayer; 1:= HalbCoop; 2:= Versus; 3:= Party; 4:= Collab
+    public int gameMode = 0;                                // 0:= Singleplayer; 1:= HalbCoop; 2:= Versus; 3:= Versus 2; 4:= Party; 5:= Collab
     public int nGameMode = -1;
     public int ownConnectionID = 0;
 
@@ -246,9 +246,12 @@ public class GameManager{
                     file.WriteLine("Versus");
                     break;
                 case 3:
-                    file.WriteLine("Party");
+                    file.WriteLine("Versus 2");
                     break;
                 case 4:
+                    file.WriteLine("Party");
+                    break;
+                case 5:
                     file.WriteLine("Collab");
                     break;
                 default:
@@ -332,9 +335,12 @@ public class GameManager{
                         line += "Versus;";
                         break;
                     case 3:
-                        line += "Party;";
+                        line += "Versus 2;";
                         break;
                     case 4:
+                        line += "Party;";
+                        break;
+                    case 5:
                         line += "Collab;";
                         break;
                     default:

@@ -213,7 +213,7 @@ public class GameLogic : MonoBehaviour {
         {
             score.text = /*"<size=+50>" + */(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
         }
-        else if (GameManager.Instance.gameMode == 2)
+        else if (GameManager.Instance.gameMode == 2 || GameManager.Instance.gameMode == 3)
         {
             if (GameManager.Instance.playerList.Count < 2)
                 return;
@@ -223,7 +223,7 @@ public class GameLogic : MonoBehaviour {
             else if (GameManager.Instance.ownConnectionID == 1)
                 score.text = /*"<size=+50>" + */"<color=green>" + (GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString() + "</color> vs. <color=red>" + GameManager.Instance.playerList[0].score;
         }
-        else if(GameManager.Instance.gameMode == 3)
+        else if(GameManager.Instance.gameMode == 4)
         {
             score.text = /*"<size=150>" + */(GameManager.Instance.correctAnswers - GameManager.Instance.wrongAnswers).ToString();
 
@@ -251,7 +251,7 @@ public class GameLogic : MonoBehaviour {
             }
             positionInScoreboardSet = false;
         }
-        else if (GameManager.Instance.gameMode == 4)
+        else if (GameManager.Instance.gameMode == 5)
         {
             int s = 0;
             foreach (NetworkObject nO in GameManager.Instance.playerList)

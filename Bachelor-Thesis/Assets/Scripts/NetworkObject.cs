@@ -58,7 +58,15 @@ public class NetworkObject : NetworkBehaviour {
             this.gameObject.name = "Player " + connectionID;
             GameManager.Instance.playerList.Add(this);
             //GameManager.Instance.playerListLength++;
-            StartCoroutine(FakePlayerBehavior());
+            if (scriptedPlayer)
+            {
+                fakePlayer = false;
+                StartCoroutine(ScriptedPlayerBehavior());
+            }
+            else
+            {
+                StartCoroutine(FakePlayerBehavior());
+            }
         }
         else
         {

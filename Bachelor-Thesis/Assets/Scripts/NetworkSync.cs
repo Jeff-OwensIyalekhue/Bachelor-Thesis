@@ -45,7 +45,7 @@ public class NetworkSync : NetworkBehaviour {
     void Update () {        
         if (GameManager.Instance.playerList.Count == 1)
         {
-            if(GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 2 && GameManager.Instance.isHost)
+            if(GameManager.Instance.gameRunning && (GameManager.Instance.gameMode == 2 || GameManager.Instance.gameMode == 3) && GameManager.Instance.isHost)
             {
                 if (!fakeOpponent)
                 {
@@ -56,7 +56,7 @@ public class NetworkSync : NetworkBehaviour {
         }
         if (GameManager.Instance.playerList.Count <= fakeEnemyAmount && GameManager.Instance.isHost)
         {
-            if (GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 3)
+            if (GameManager.Instance.gameRunning && GameManager.Instance.gameMode == 4)
             {
                 if (!fakeOpponent)
                 {
@@ -86,7 +86,7 @@ public class NetworkSync : NetworkBehaviour {
                 {
                     StartCoroutine(StartTransition());
                 }
-                else if( GameManager.Instance.gameMode == 2 && GameManager.Instance.playerList.Count >= 2)
+                else if((GameManager.Instance.gameMode == 2 || GameManager.Instance.gameMode == 3) && GameManager.Instance.playerList.Count >= 2)
                 {
                     if (GameManager.Instance.playerList[0].clientReady)
                         if (GameManager.Instance.playerList[1].clientReady)
@@ -122,6 +122,7 @@ public class NetworkSync : NetworkBehaviour {
             dummy[j] = Instantiate(fakeEnemyPrefab);
             NetworkServer.Spawn(dummy[j]);
         }
+        dummy[0].GetComponent<NetworkObject>().scriptedPlayer = true;
 
         yield return new WaitWhile(() => GameManager.Instance.gameRunning);
 
@@ -139,7 +140,7 @@ public class NetworkSync : NetworkBehaviour {
     }
     IEnumerator EndTransition()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
         // Reset GameManager Data
         GameManager.Instance.correctAnswers = 0;

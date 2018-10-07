@@ -3601,7 +3601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fakeEnemyPrefab: {fileID: 1185904889421722, guid: 7f223179dc879774c82e5d2577f91df2,
     type: 2}
-  fakeEnemyAmount: 1
+  fakeEnemyAmount: 3
   canvas: {fileID: 1597024264}
   anim: {fileID: 1451841228}
   clip: {fileID: 7400000, guid: a9116ea9d2ae21f4db5e995ebb01f2bc, type: 2}
@@ -5628,11 +5628,13 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: Normal
+    - m_Text: Singleplayer
       m_Image: {fileID: 0}
     - m_Text: Halb Coop
       m_Image: {fileID: 0}
     - m_Text: Versus
+      m_Image: {fileID: 0}
+    - m_Text: Versus 2
       m_Image: {fileID: 0}
     - m_Text: Party
       m_Image: {fileID: 0}
