@@ -122,7 +122,8 @@ public class NetworkSync : NetworkBehaviour {
             dummy[j] = Instantiate(fakeEnemyPrefab);
             NetworkServer.Spawn(dummy[j]);
         }
-        dummy[0].GetComponent<NetworkObject>().scriptedPlayer = true;
+        if(!GameManager.Instance.playerList[0].scriptedPlayer)
+            dummy[0].GetComponent<NetworkObject>().scriptedPlayer = true;
 
         yield return new WaitWhile(() => GameManager.Instance.gameRunning);
 

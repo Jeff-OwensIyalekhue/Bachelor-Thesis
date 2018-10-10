@@ -5,6 +5,10 @@ using UnityEngine.Networking;
 
 public class NetworkObject : NetworkBehaviour {
 
+    public float timeD, time1, time2, time3;
+    float timeStamp = 0;
+    int lastEnemyScore = 0;
+
     [Header("Autonomous Player")]
     public bool fakePlayer = false;
     public bool scriptedPlayer = false;
@@ -174,6 +178,38 @@ public class NetworkObject : NetworkBehaviour {
                 }
             }
         }
+
+        if (scriptedPlayer && GameManager.Instance.gameRunning)
+        {
+            if (GameManager.Instance.playerList.Count >= 2)
+            {
+                if (connectionID == 0)
+                {
+                    if (lastEnemyScore != GameManager.Instance.playerList[1].score)
+                    {
+                        time1 = time2;
+                        time2 = time3;
+                        time3 = Time.time - timeStamp;
+                        timeStamp = Time.time;
+                        lastEnemyScore = GameManager.Instance.playerList[1].score;
+                    }
+                }
+                else
+                {
+                    if (lastEnemyScore != GameManager.Instance.playerList[0].score)
+                    {
+                        time1 = time2;
+                        time2 = time3;
+                        time3 = Time.time - timeStamp;
+                        timeStamp = Time.time;
+                        lastEnemyScore = GameManager.Instance.playerList[0].score;
+                    }
+                }
+
+                timeD = (time1 + time2 + time3) / 3;
+            }
+
+        }
     }
 
     IEnumerator FakePlayerBehavior()
@@ -226,97 +262,141 @@ public class NetworkObject : NetworkBehaviour {
     IEnumerator ScriptedPlayerBehavior()
     {
         scriptRunning = true;
+        
+        switch (gameMode)
+        {
+            case 0:
+                time1 = singleplayerScript[0];
+                time2 = singleplayerScript[1];
+                time3 = singleplayerScript[2];
+                break;
+            case 1:
+                time1 = halbcoopScript[0];
+                time2 = halbcoopScript[1];
+                time3 = halbcoopScript[2];
+                break;
+            case 2:
+                time1 = versusScript[0];
+                time2 = versusScript[1];
+                time3 = versusScript[2];
+                break;
+            case 3:
+                time1 = partyScript[0];
+                time2 = partyScript[1];
+                time3 = partyScript[2];
+                break;
+            default:
+                time1 = singleplayerScript[0];
+                time2 = singleplayerScript[1];
+                time3 = singleplayerScript[2];
+                break;
+        }
+        timeD = (time1 + time2 + time3) / 3;
+
         while (GameManager.Instance.gameRunning)
         {
-            switch (gameMode)
+            GameLogic.SolveCountdown(timeD + Time.time);
+            yield return new WaitForSeconds(timeD);
+            if (GameManager.Instance.supervisor)
             {
-                case 0:
-                    foreach (float time in singleplayerScript)
-                    {
-                        yield return new WaitWhile(() => GameLogic.transition);
-                        //Debug.Log("task readable");
-                        yield return new WaitForSeconds(1.5f);
-                        GameLogic.SolveCountdown(time + Time.time);
-                        yield return new WaitForSeconds(time);
-                        if (GameManager.Instance.supervisor)
-                        {
-                            GameLogic.ScriptSolve();
-                        }
-                        else
-                        {
-                            score++;
-                        }
-                    }
-                    break;
-                case 1:
-                    foreach (float time in halbcoopScript)
-                    {
-                        yield return new WaitWhile(() => GameLogic.transition);
-                        yield return new WaitForSeconds(1.5f);
-                        GameLogic.SolveCountdown(time + Time.time);
-                        yield return new WaitForSeconds(time);
-                        if (GameManager.Instance.supervisor)
-                        {
-                            GameLogic.ScriptSolve();
-                        }
-                        else
-                        {
-                            score++;
-                        }
-                    }
-                    break;
-                case 2:
-                    foreach (float time in versusScript)
-                    {
-                        yield return new WaitWhile(() => GameLogic.transition);
-                        yield return new WaitForSeconds(1.5f);
-                        GameLogic.SolveCountdown(time + Time.time);
-                        yield return new WaitForSeconds(time);
-                        if (GameManager.Instance.supervisor)
-                        {
-                            GameLogic.ScriptSolve();
-                        }
-                        else
-                        {
-                            score++;
-                        }
-                    }
-                    break;
-                case 3:
-                    foreach (float time in partyScript)
-                    {
-                        yield return new WaitWhile(() => GameLogic.transition);
-                        yield return new WaitForSeconds(1.5f);
-                        GameLogic.SolveCountdown(time + Time.time);
-                        yield return new WaitForSeconds(time);
-                        if (GameManager.Instance.supervisor)
-                        {
-                            GameLogic.ScriptSolve();
-                        }
-                        else
-                        {
-                            score++;
-                        }
-                    }
-                    break;
-                default:
-                    foreach (float time in singleplayerScript)
-                    {
-                        yield return new WaitWhile(() => GameLogic.transition);
-                        yield return new WaitForSeconds(1.5f);
-                        GameLogic.SolveCountdown(time + Time.time);
-                        yield return new WaitForSeconds(time);
-                        if (GameManager.Instance.supervisor)
-                        {
-                            GameLogic.ScriptSolve();
-                        }
-                        else
-                        {
-                            score++;
-                        }
-                    }
-                    break;
+                GameLogic.ScriptSolve();
             }
+            else
+            {
+                score++;
+            }
+
+            #region Fullscripted
+            //switch (gameMode)
+            //{
+            //    case 0:
+            //        //foreach (float time in singleplayerScript)
+            //        //{
+            //        //    yield return new WaitWhile(() => GameLogic.transition);
+            //        //    //Debug.Log("task readable");
+            //        //    yield return new WaitForSeconds(1.5f);
+            //        //    GameLogic.SolveCountdown(time + Time.time);
+            //        //    yield return new WaitForSeconds(time);
+            //        //    if (GameManager.Instance.supervisor)
+            //        //    {
+            //        //        GameLogic.ScriptSolve();
+            //        //    }
+            //        //    else
+            //        //    {
+            //        //        score++;
+            //        //    }
+            //        //}
+            //        break;
+            //    case 1:
+            //        //foreach (float time in halbcoopScript)
+            //        //{
+            //        //    yield return new WaitWhile(() => GameLogic.transition);
+            //        //    yield return new WaitForSeconds(1.5f);
+            //        //    GameLogic.SolveCountdown(time + Time.time);
+            //        //    yield return new WaitForSeconds(time);
+            //        //    if (GameManager.Instance.supervisor)
+            //        //    {
+            //        //        GameLogic.ScriptSolve();
+            //        //    }
+            //        //    else
+            //        //    {
+            //        //        score++;
+            //        //    }
+            //        //}
+            //        break;
+            //    case 2:
+            //        //foreach (float time in versusScript)
+            //        //{
+            //        //    yield return new WaitWhile(() => GameLogic.transition);
+            //        //    yield return new WaitForSeconds(1.5f);
+            //        //    GameLogic.SolveCountdown(time + Time.time);
+            //        //    yield return new WaitForSeconds(time);
+            //        //    if (GameManager.Instance.supervisor)
+            //        //    {
+            //        //        GameLogic.ScriptSolve();
+            //        //    }
+            //        //    else
+            //        //    {
+            //        //        score++;
+            //        //    }
+            //        //}
+            //        break;
+            //    case 3:
+            //        //foreach (float time in partyScript)
+            //        //{
+            //        //    yield return new WaitWhile(() => GameLogic.transition);
+            //        //    yield return new WaitForSeconds(1.5f);
+            //        //    GameLogic.SolveCountdown(time + Time.time);
+            //        //    yield return new WaitForSeconds(time);
+            //        //    if (GameManager.Instance.supervisor)
+            //        //    {
+            //        //        GameLogic.ScriptSolve();
+            //        //    }
+            //        //    else
+            //        //    {
+            //        //        score++;
+            //        //    }
+            //        //}
+            //        break;
+            //    default:
+            //        //foreach (float time in singleplayerScript)
+            //        //{
+            //        //    yield return new WaitWhile(() => GameLogic.transition);
+            //        //    yield return new WaitForSeconds(1.5f);
+            //        //    GameLogic.SolveCountdown(time + Time.time);
+            //        //    yield return new WaitForSeconds(time);
+            //        //    if (GameManager.Instance.supervisor)
+            //        //    {
+            //        //        GameLogic.ScriptSolve();
+            //        //    }
+            //        //    else
+            //        //    {
+            //        //        score++;
+            //        //    }
+            //        //}
+            //        break;
+            //}
+            #endregion
         }
         scriptRunning = false;
     }

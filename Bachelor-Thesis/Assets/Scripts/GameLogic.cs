@@ -182,8 +182,8 @@ public class GameLogic : MonoBehaviour {
         yield return new WaitForSeconds(1);
         timer.text = "<color=yellow>2</color>";
         yield return new WaitForSeconds(1);
-        int r = Random.Range(0, entryClip.Length);
-        anim.SetTrigger(entryClip[r].name);
+        //int r = Random.Range(0, entryClip.Length);
+        //anim.SetTrigger(entryClip[r].name);
         timer.text = "<color=green>1</color>";
         yield return new WaitForSeconds(1);
 
@@ -274,7 +274,7 @@ public class GameLogic : MonoBehaviour {
     // Sets a new task up
     void Task()
     {
-        transition = true;
+        //transition = true;
 
         answered = false;
 
@@ -332,16 +332,16 @@ public class GameLogic : MonoBehaviour {
         //anim.SetTrigger(entryClip[r].name);
         //yield return new WaitForSeconds(entryClip[r].length * (1/3));
 
-        if (!numberAText.gameObject.activeSelf)
-            numberAText.gameObject.SetActive(true);
-        if (!numberBText.gameObject.activeSelf)
-            numberBText.gameObject.SetActive(true);
-        if (!opText.gameObject.activeSelf)
-            opText.gameObject.SetActive(true);
+        //if (!numberAText.gameObject.activeSelf)
+        //    numberAText.gameObject.SetActive(true);
+        //if (!numberBText.gameObject.activeSelf)
+        //    numberBText.gameObject.SetActive(true);
+        //if (!opText.gameObject.activeSelf)
+        //    opText.gameObject.SetActive(true);
 
         timeTask = Time.time;
 
-        transition = false;
+        //transition = false;
         yield return null;
     }
 
@@ -349,10 +349,10 @@ public class GameLogic : MonoBehaviour {
     {
         if (!GameManager.Instance.gameRunning)
             return;
-        if (transition)
-            return;
+        //if (transition)
+        //    return;
 
-        transition = true;
+        //transition = true;
 
         List<int> eIDs = new List<int>();
         List<int> eScores = new List<int>();
@@ -410,9 +410,9 @@ public class GameLogic : MonoBehaviour {
         yield return new WaitForSeconds(0.6f);
         if (GameManager.Instance.showScore)
             audioSource.Play();
-        int r = Random.Range(0, exitClip.Length);
-        anim.SetTrigger(exitClip[r].name);
-        yield return new WaitForSeconds(exitClip[r].length);
+        //int r = Random.Range(0, exitClip.Length);
+        //anim.SetTrigger(exitClip[r].name);
+        //yield return new WaitForSeconds(exitClip[r].length);
 
         //numberAText.gameObject.SetActive(false);
         //numberBText.gameObject.SetActive(false);
@@ -422,6 +422,6 @@ public class GameLogic : MonoBehaviour {
         inputField.text = "";
         inputField.ActivateInputField();
         answered = true;
-        transition = false;
+        //transition = false;
     }
 }
