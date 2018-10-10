@@ -189,7 +189,10 @@ public class NetworkObject : NetworkBehaviour {
                     {
                         time1 = time2;
                         time2 = time3;
-                        time3 = Time.time - timeStamp;
+                        if(Time.time - timeStamp < 7)
+                            time3 = Time.time - timeStamp;
+                        else
+                            time3 = 7;
                         timeStamp = Time.time;
                         lastEnemyScore = GameManager.Instance.playerList[1].score;
                     }
@@ -200,7 +203,10 @@ public class NetworkObject : NetworkBehaviour {
                     {
                         time1 = time2;
                         time2 = time3;
-                        time3 = Time.time - timeStamp;
+                        if (Time.time - timeStamp < 7)
+                            time3 = Time.time - timeStamp;
+                        else
+                            time3 = 7;
                         timeStamp = Time.time;
                         lastEnemyScore = GameManager.Instance.playerList[0].score;
                     }
