@@ -162,7 +162,7 @@ public class GameLogic : MonoBehaviour {
 
             if (enterSpamfilter)
             {
-                if (Input.GetKeyUp(KeyCode.KeypadEnter) || Input.GetKeyUp("enter"))
+                if (Input.GetKeyUp(KeyCode.KeypadEnter) || Input.GetKeyUp(KeyCode.Return))
                 {
                     Debug.Log("unlock");
                     enterSpamfilter = false;
