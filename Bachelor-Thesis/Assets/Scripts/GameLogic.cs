@@ -60,6 +60,7 @@ public class GameLogic : MonoBehaviour {
     float startTime, timeTask;      // start time of a task
 
     bool answered = true;
+    bool enterSpamfilter = false;
     float timeStart;                // start time of the  game after the start countdown
     #endregion
 
@@ -159,7 +160,16 @@ public class GameLogic : MonoBehaviour {
 
             }
 
-        // checks if new task should be asked
+            if (enterSpamfilter)
+            {
+                if (Input.GetKeyUp(KeyCode.KeypadEnter) || Input.GetKeyUp("enter"))
+                {
+                    Debug.Log("unlock");
+                    enterSpamfilter = false;
+                }
+            }
+
+            // checks if new task should be asked
             if (answered)
             {
                 Task();
@@ -353,6 +363,16 @@ public class GameLogic : MonoBehaviour {
         //    return;
 
         //transition = true;
+        if (enterSpamfilter)
+        {
+            inputField.DeactivateInputField();
+            inputField.text = "";
+            inputField.ActivateInputField();
+            return;
+        }
+
+        enterSpamfilter = true;
+        Debug.Log("lock");
 
         List<int> eIDs = new List<int>();
         List<int> eScores = new List<int>();
