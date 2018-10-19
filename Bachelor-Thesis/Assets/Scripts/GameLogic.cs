@@ -407,7 +407,7 @@ public class GameLogic : MonoBehaviour {
     }
     IEnumerator TaskExit()
     {
-        yield return new WaitForSeconds(0.6f);
+        //yield return new WaitForSeconds(0.6f);
         if (GameManager.Instance.showScore)
             audioSource.Play();
         //int r = Random.Range(0, exitClip.Length);
@@ -423,5 +423,6 @@ public class GameLogic : MonoBehaviour {
         inputField.ActivateInputField();
         answered = true;
         //transition = false;
+        yield return 0;
     }
 }
