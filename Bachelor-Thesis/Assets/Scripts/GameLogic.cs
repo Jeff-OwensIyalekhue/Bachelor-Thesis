@@ -371,9 +371,12 @@ public class GameLogic : MonoBehaviour {
             return;
         }
 
-        enterSpamfilter = true;
-        Debug.Log("lock");
-
+        if(!GameManager.Instance.playerList[GameManager.Instance.ownConnectionID].scriptedPlayer && !GameManager.Instance.playerList[GameManager.Instance.ownConnectionID].fakePlayer)
+        {
+            enterSpamfilter = true;
+            Debug.Log("lock");
+        }
+            
         List<int> eIDs = new List<int>();
         List<int> eScores = new List<int>();
         bool behind = false;
