@@ -1,0 +1,17 @@
+Task ID;Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point;Supervisor
+0;2;male;3;Versus 2;0.01;1.60;1.60;True;+1;False
+1;2;male;3;Versus 2;1.60;6.00;4.40;False;-1;False
+2;2;male;3;Versus 2;6.00;7.60;1.60;True;+1;False
+3;2;male;3;Versus 2;7.60;9.00;1.40;False;+1;False
+4;2;male;3;Versus 2;9.00;10.28;1.27;False;+1;False
+5;2;male;3;Versus 2;10.28;12.25;1.97;False;+1;False
+6;2;male;3;Versus 2;12.25;13.69;1.44;False;+1;False
+7;2;male;3;Versus 2;13.69;15.25;1.56;False;+1;False
+8;2;male;3;Versus 2;15.25;16.46;1.22;False;+1;False
+9;2;male;3;Versus 2;16.46;18.17;1.71;False;+1;False
+10;2;male;3;Versus 2;18.17;19.59;1.42;False;+1;False
+11;2;male;3;Versus 2;19.59;20.81;1.22;False;+1;False
+12;2;male;3;Versus 2;20.81;21.97;1.15;False;+1;False
+13;2;male;3;Versus 2;21.97;23.86;1.89;False;+1;False
+14;2;male;3;Versus 2;23.86;25.65;1.78;False;0;False
+15;2;male;3;Versus 2;25.65;27.17;1.52;False;0;False

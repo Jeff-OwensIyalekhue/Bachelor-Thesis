@@ -1,0 +1,12 @@
+Task ID;Participant ID;Gender;Turn;Modus;TimestampStart;TimestampEnd;Duration;Behind;Point;Supervisor
+0;2;male;3;Halb-Coop;0.00;1.58;1.58;True;+1;False
+1;2;male;3;Halb-Coop;1.58;4.12;2.54;False;+1;False
+2;2;male;3;Halb-Coop;4.12;5.53;1.41;False;+1;False
+3;2;male;3;Halb-Coop;5.53;7.87;2.34;False;-1;False
+4;2;male;3;Halb-Coop;7.87;9.76;1.89;False;+1;False
+5;2;male;3;Halb-Coop;9.76;13.36;3.60;False;+1;False
+6;2;male;3;Halb-Coop;13.36;16.37;3.00;False;+1;False
+7;2;male;3;Halb-Coop;16.37;18.09;1.73;False;+1;False
+8;2;male;3;Halb-Coop;18.09;20.55;2.46;False;+1;False
+9;2;male;3;Halb-Coop;20.55;23.20;2.65;False;+1;False
+10;2;male;3;Halb-Coop;23.20;24.42;1.22;False;0;False

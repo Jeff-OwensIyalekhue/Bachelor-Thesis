@@ -1,0 +1,751 @@
+Tuesday, October 23, 2018, 12:20:46 PM
+Participant 2
+Gender:  male
+1. Turn
+Player 1
+Singleplayer
+120.00 Seconds
+Tasks:
+    Overall: 67
+        Solved: 67
+            Correct Solutions: 67
+            Wrong Solutions: 0
+        Skipped: 0
+TaskData:
+1. Task **************************
+Start at: 0.01
+End at: 1.30
+9 - 9 = 0
+time needed in seconds: 1.30
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+2. Task **************************
+Start at: 1.30
+End at: 2.88
+4 * 2 = 8
+time needed in seconds: 1.58
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+3. Task **************************
+Start at: 2.88
+End at: 5.04
+9 * 3 = 27
+time needed in seconds: 2.15
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+4. Task **************************
+Start at: 5.04
+End at: 6.41
+6 * 1 = 6
+time needed in seconds: 1.38
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+5. Task **************************
+Start at: 6.41
+End at: 7.66
+2 + 1 = 3
+time needed in seconds: 1.25
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+6. Task **************************
+Start at: 7.66
+End at: 8.77
+0 - 0 = 0
+time needed in seconds: 1.11
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+7. Task **************************
+Start at: 8.77
+End at: 9.87
+0 + 3 = 3
+time needed in seconds: 1.10
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+8. Task **************************
+Start at: 9.87
+End at: 12.52
+3 - 9 = -6
+time needed in seconds: 2.65
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+9. Task **************************
+Start at: 12.52
+End at: 13.91
+2 + 7 = 9
+time needed in seconds: 1.39
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+10. Task **************************
+Start at: 13.91
+End at: 15.30
+7 - 4 = 3
+time needed in seconds: 1.40
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+11. Task **************************
+Start at: 15.30
+End at: 17.13
+2 - 3 = -1
+time needed in seconds: 1.83
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+12. Task **************************
+Start at: 17.13
+End at: 18.87
+4 * 5 = 20
+time needed in seconds: 1.74
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+13. Task **************************
+Start at: 18.87
+End at: 20.01
+4 + 1 = 5
+time needed in seconds: 1.13
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+14. Task **************************
+Start at: 20.01
+End at: 21.20
+0 + 2 = 2
+time needed in seconds: 1.19
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+15. Task **************************
+Start at: 21.20
+End at: 22.58
+5 * 2 = 10
+time needed in seconds: 1.39
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+16. Task **************************
+Start at: 22.58
+End at: 25.75
+1 + 1 = 2
+time needed in seconds: 3.17
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+17. Task **************************
+Start at: 25.75
+End at: 27.72
+1 - 6 = -5
+time needed in seconds: 1.97
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+18. Task **************************
+Start at: 27.72
+End at: 29.65
+3 * 8 = 24
+time needed in seconds: 1.92
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+19. Task **************************
+Start at: 29.65
+End at: 30.97
+4 + 0 = 4
+time needed in seconds: 1.32
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+20. Task **************************
+Start at: 30.97
+End at: 32.12
+2 + 2 = 4
+time needed in seconds: 1.16
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+21. Task **************************
+Start at: 32.12
+End at: 33.39
+8 - 6 = 2
+time needed in seconds: 1.27
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+22. Task **************************
+Start at: 33.39
+End at: 34.51
+6 - 1 = 5
+time needed in seconds: 1.12
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+23. Task **************************
+Start at: 34.51
+End at: 38.29
+4 * 6 = 24
+time needed in seconds: 3.78
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+24. Task **************************
+Start at: 38.29
+End at: 40.82
+5 * 9 = 45
+time needed in seconds: 2.53
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+25. Task **************************
+Start at: 40.82
+End at: 42.71
+5 - 9 = -4
+time needed in seconds: 1.88
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+26. Task **************************
+Start at: 42.71
+End at: 44.28
+0 - 3 = -3
+time needed in seconds: 1.57
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+27. Task **************************
+Start at: 44.28
+End at: 46.24
+5 * 5 = 25
+time needed in seconds: 1.97
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+28. Task **************************
+Start at: 46.24
+End at: 47.39
+4 - 3 = 1
+time needed in seconds: 1.15
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+29. Task **************************
+Start at: 47.39
+End at: 49.58
+1 - 3 = -2
+time needed in seconds: 2.19
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+30. Task **************************
+Start at: 49.58
+End at: 51.74
+6 + 6 = 12
+time needed in seconds: 2.16
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+31. Task **************************
+Start at: 51.74
+End at: 53.18
+3 - 4 = -1
+time needed in seconds: 1.44
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+32. Task **************************
+Start at: 53.18
+End at: 54.42
+0 + 4 = 4
+time needed in seconds: 1.24
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+33. Task **************************
+Start at: 54.42
+End at: 55.60
+1 * 6 = 6
+time needed in seconds: 1.18
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+34. Task **************************
+Start at: 55.60
+End at: 58.51
+8 + 7 = 15
+time needed in seconds: 2.91
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+35. Task **************************
+Start at: 58.51
+End at: 59.92
+0 + 2 = 2
+time needed in seconds: 1.41
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+36. Task **************************
+Start at: 59.92
+End at: 60.91
+3 + 0 = 3
+time needed in seconds: 0.98
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+37. Task **************************
+Start at: 60.91
+End at: 62.02
+5 - 4 = 1
+time needed in seconds: 1.11
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+38. Task **************************
+Start at: 62.02
+End at: 63.44
+3 * 5 = 15
+time needed in seconds: 1.42
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+39. Task **************************
+Start at: 63.44
+End at: 64.48
+5 + 0 = 5
+time needed in seconds: 1.04
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+40. Task **************************
+Start at: 64.48
+End at: 67.05
+7 * 8 = 56
+time needed in seconds: 2.57
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+41. Task **************************
+Start at: 67.05
+End at: 68.67
+2 * 7 = 14
+time needed in seconds: 1.62
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+42. Task **************************
+Start at: 68.67
+End at: 71.38
+6 * 8 = 48
+time needed in seconds: 2.71
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+43. Task **************************
+Start at: 71.38
+End at: 73.16
+7 + 7 = 14
+time needed in seconds: 1.78
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+44. Task **************************
+Start at: 73.16
+End at: 75.51
+9 + 7 = 16
+time needed in seconds: 2.35
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+45. Task **************************
+Start at: 75.51
+End at: 76.64
+3 + 0 = 3
+time needed in seconds: 1.13
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+46. Task **************************
+Start at: 76.64
+End at: 78.53
+1 - 4 = -3
+time needed in seconds: 1.89
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+47. Task **************************
+Start at: 78.53
+End at: 80.49
+3 + 8 = 11
+time needed in seconds: 1.96
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+48. Task **************************
+Start at: 80.49
+End at: 82.58
+6 - 8 = -2
+time needed in seconds: 2.09
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+49. Task **************************
+Start at: 82.58
+End at: 84.28
+7 * 8 = 56
+time needed in seconds: 1.70
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+50. Task **************************
+Start at: 84.28
+End at: 86.47
+6 * 6 = 36
+time needed in seconds: 2.19
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+51. Task **************************
+Start at: 86.47
+End at: 88.55
+9 + 5 = 14
+time needed in seconds: 2.08
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+52. Task **************************
+Start at: 88.55
+End at: 89.63
+3 + 0 = 3
+time needed in seconds: 1.08
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+53. Task **************************
+Start at: 89.63
+End at: 91.25
+9 - 3 = 6
+time needed in seconds: 1.62
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+54. Task **************************
+Start at: 91.25
+End at: 92.51
+7 * 1 = 7
+time needed in seconds: 1.26
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+55. Task **************************
+Start at: 92.51
+End at: 94.73
+6 + 8 = 14
+time needed in seconds: 2.21
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+56. Task **************************
+Start at: 94.73
+End at: 96.12
+6 + 0 = 6
+time needed in seconds: 1.40
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+57. Task **************************
+Start at: 96.12
+End at: 98.38
+5 * 5 = 25
+time needed in seconds: 2.26
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+58. Task **************************
+Start at: 98.38
+End at: 100.57
+1 - 8 = -7
+time needed in seconds: 2.19
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+59. Task **************************
+Start at: 100.57
+End at: 104.91
+7 * 4 = 28
+time needed in seconds: 4.34
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+60. Task **************************
+Start at: 104.91
+End at: 106.48
+5 + 4 = 9
+time needed in seconds: 1.57
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+61. Task **************************
+Start at: 106.48
+End at: 107.73
+2 + 7 = 9
+time needed in seconds: 1.24
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+62. Task **************************
+Start at: 107.73
+End at: 109.51
+4 - 8 = -4
+time needed in seconds: 1.78
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+63. Task **************************
+Start at: 109.51
+End at: 111.96
+9 * 7 = 63
+time needed in seconds: 2.45
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+64. Task **************************
+Start at: 111.96
+End at: 113.19
+5 - 1 = 4
+time needed in seconds: 1.23
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+65. Task **************************
+Start at: 113.19
+End at: 115.02
+9 - 5 = 4
+time needed in seconds: 1.83
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+66. Task **************************
+Start at: 115.02
+End at: 116.95
+2 + 4 = 6
+time needed in seconds: 1.93
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
+67. Task **************************
+Start at: 116.95
+End at: 119.01
+3 * 1 = 3
+time needed in seconds: 2.06
+solved: True
+correct answer: True
+is the player behind: False
+Enemy score at this point: 
+    Player 0 : 0
+**********************************
