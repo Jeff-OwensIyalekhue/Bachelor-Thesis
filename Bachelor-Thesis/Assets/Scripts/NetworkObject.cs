@@ -10,8 +10,8 @@ public class NetworkObject : NetworkBehaviour {
     int lastEnemyScore = 0;
 
     [Header("Autonomous Player")]
-    public bool fakePlayer = false;
-    public bool scriptedPlayer = false;
+    public bool fakePlayer = false;         // fake player based on random generated behaviour
+    public bool scriptedPlayer = false;     // fake player using sliding window method in regard of other player
     bool scriptRunning = false;
     float[] singleplayerScript = {2.332f, 3.016f, 3.308f, 2.642f, 2.226f, 3.438f, 2.61f, 3.794f, 2.402f, 2.796f, 2.882f,
                                       2.224f, 2.188f, 2.548f, 2.582f, 1.986f, 2.788f, 2.84f, 2.294f, 1.698f, 2.288f, 1.946f,

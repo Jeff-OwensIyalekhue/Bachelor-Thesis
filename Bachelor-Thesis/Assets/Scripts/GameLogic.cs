@@ -160,6 +160,7 @@ public class GameLogic : MonoBehaviour {
 
             }
 
+            // Filtert die Eingaebestätigung des Inputfields, da diese eine gehaltene Taste als mehrer Eingaben sieht
             if (enterSpamfilter)
             {
                 if (Input.GetKeyUp(KeyCode.KeypadEnter) || Input.GetKeyUp(KeyCode.Return))

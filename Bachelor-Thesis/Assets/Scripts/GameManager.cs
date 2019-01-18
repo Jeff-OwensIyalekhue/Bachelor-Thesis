@@ -125,6 +125,7 @@ public class GameManager{
         }
     }
 
+    //a function to check if a participant id already exists, it checks if the location to save participant data already exists
     public bool CheckParticipantID()
     {
         string pathFolder;
